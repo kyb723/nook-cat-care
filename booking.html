@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>預約探訪｜Nook Cat Care — 香港上門貓咪照顧</title>
+<meta name="description" content="預約 Nook Cat Care 上門貓咪照顧。查看可預約日期同時段，由免費見面熟習開始。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ============ Tokens — Nook Cat Care Brand Guideline v1 ============ */
+:root{
+  --cream:#F8F8F5;
+  --ink:#282818;
+  --biscuit:#D8A878;
+  --olive:#786828;
+  --leaf:#088838;
+  --toy-yellow:#F8C808;
+  --heart-red:#C81818;
+  --soft-blue:#88E8F8;
+
+  --paper:#FFFDF8;
+  --biscuit-tint:rgba(216,168,120,.14);
+  --line:rgba(40,40,24,.14);
+  --line-soft:rgba(40,40,24,.08);
+  --ink-60:rgba(40,40,24,.68);
+  --ink-35:rgba(40,40,24,.35);
+
+  --font-stack:"Nunito Sans","Noto Sans TC",system-ui,sans-serif;
+
+  --radius-card:22px;
+  --shadow-card:0 2px 0 rgba(40,40,24,.06),0 14px 32px -18px rgba(40,40,24,.22);
+  --wrap:1120px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+body{
+  font-family:var(--font-stack);
+  font-size:1.0625rem;line-height:1.7;
+  color:var(--ink);background:var(--cream);
+  -webkit-font-smoothing:antialiased;
+}
+
+:root[lang="zh-Hant"] [data-lang="en"]{display:none !important}
+:root[lang="en"] [data-lang="tc"]{display:none !important}
+:root[lang="zh-Hant"] h1,:root[lang="zh-Hant"] h2{letter-spacing:.015em;line-height:1.28}
+:root[lang="zh-Hant"] body{letter-spacing:.01em}
+
+::selection{background:var(--biscuit);color:var(--ink)}
+:focus-visible{outline:3px solid var(--biscuit);outline-offset:3px;border-radius:6px}
+
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+
+h1,h2,h3{font-weight:800;line-height:1.12;letter-spacing:-.015em}
+h1{font-size:clamp(1.9rem,4.4vw,2.9rem)}
+h3{font-size:1.1rem;letter-spacing:0}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:.6em;flex-wrap:wrap;
+  font-size:.8rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--olive);margin-bottom:1rem;
+}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--biscuit);border-radius:2px}
+.eyebrow .sub{letter-spacing:.06em;color:var(--ink-60);font-weight:700;text-transform:none}
+
+.lede{font-size:clamp(1rem,1.5vw,1.13rem);color:var(--ink-60);max-width:36em}
+
+/* ============ Buttons ============ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.55em;
+  font-family:var(--font-stack);font-size:1rem;font-weight:800;
+  padding:.85em 1.6em;border-radius:999px;border:2px solid var(--ink);
+  cursor:pointer;text-decoration:none;
+  transition:transform .16s ease,background-color .16s ease,color .16s ease,box-shadow .16s ease,opacity .16s ease;
+}
+.btn-primary{background:var(--ink);color:var(--cream)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 20px -8px rgba(40,40,24,.45)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-ghost{background:transparent;color:var(--ink)}
+.btn-ghost:hover{background:var(--biscuit-tint);transform:translateY(-2px)}
+@media (prefers-reduced-motion:reduce){.btn:hover{transform:none}}
+
+/* ============ Language toggle ============ */
+.lang-toggle{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;background:var(--paper);flex:none}
+.lang-toggle button{
+  font-family:var(--font-stack);font-size:.82rem;font-weight:800;letter-spacing:.03em;
+  padding:.42em .95em;border:none;background:transparent;color:var(--ink);cursor:pointer;
+  transition:background-color .15s ease,color .15s ease;
+}
+.lang-toggle button[aria-pressed="true"]{background:var(--ink);color:var(--cream)}
+
+/* ============ Header ============ */
+.site-header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(248,248,245,.92);backdrop-filter:blur(8px);
+  border-bottom:1.5px solid var(--line-soft);
+}
+.site-header .wrap{display:flex;align-items:center;gap:clamp(.8rem,2vw,1.4rem);height:78px}
+.site-header .brand{margin-right:auto}
+.brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;color:var(--ink)}
+.brand svg{display:block}
+.brand-word{font-weight:800;font-size:1.28rem;line-height:1.05;letter-spacing:-.01em}
+.brand-word .nook{color:var(--biscuit);display:block;font-size:1.32em}
+.brand-word .cat-care{font-size:.68em;letter-spacing:.09em;text-transform:uppercase}
+.back-link{font-weight:700;font-size:.95rem;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:.4em}
+.back-link:hover{text-decoration:underline;text-decoration-color:var(--biscuit);text-decoration-thickness:2px}
+
+/* ============ Booking layout ============ */
+.booking-hero{padding:clamp(40px,6vw,64px) 0 clamp(24px,3vw,36px)}
+.booking-hero h1{margin-bottom:.8rem}
+
+.steps-chips{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.6rem}
+.chip{
+  display:inline-flex;align-items:center;gap:.5em;
+  font-size:.88rem;font-weight:800;
+  border:1.5px solid var(--line);border-radius:999px;
+  background:var(--paper);padding:.45em 1em .45em .5em;color:var(--ink-60);
+  transition:border-color .2s,color .2s;
+}
+.chip .n{
+  width:26px;height:26px;border-radius:9px 10px 8px 10px;
+  background:var(--biscuit-tint);border:1.5px solid var(--line);
+  display:grid;place-items:center;font-size:.85rem;color:var(--ink-60);
+  transition:background-color .2s,border-color .2s,color .2s;
+}
+.chip.done .n,.chip.active .n{background:var(--biscuit);border-color:var(--ink);color:var(--ink)}
+.chip.active{border-color:var(--ink);color:var(--ink)}
+.chip.done{color:var(--ink)}
+.chip.done .n::before{content:"✓"}
+.chip.done .n span{display:none}
+
+.booking-body{padding:clamp(20px,3vw,36px) 0 clamp(72px,9vw,110px)}
+
+.card{
+  background:var(--paper);border:1.5px solid var(--line);
+  border-radius:var(--radius-card);box-shadow:var(--shadow-card);
+  padding:clamp(1.4rem,2.5vw,2rem);
+}
+.card+.card{margin-top:1.3rem}
+.card h2{font-size:1.25rem;margin-bottom:.35rem;display:flex;align-items:center;gap:.6em}
+.card .hint{font-size:.92rem;color:var(--ink-60);margin-bottom:1.2rem}
+.card h2 .step-n{
+  flex:none;width:32px;height:32px;border-radius:11px 12px 10px 12px;
+  background:var(--biscuit);border:2px solid var(--ink);
+  display:grid;place-items:center;font-size:.95rem;font-weight:800;
+}
+
+.booking-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:1.3rem;align-items:start;margin-top:1.3rem}
+@media (max-width:880px){.booking-grid{grid-template-columns:1fr}}
+
+/* ============ Service picker ============ */
+.service-picker{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem}
+@media (max-width:680px){.service-picker{grid-template-columns:1fr}}
+.service-option input{position:absolute;opacity:0;pointer-events:none}
+.service-option label{
+  display:block;height:100%;cursor:pointer;
+  border:2px solid var(--line);border-radius:16px;
+  padding:1rem 1.1rem;background:var(--cream);
+  transition:border-color .15s,background-color .15s,transform .15s;
+}
+.service-option label:hover{transform:translateY(-2px)}
+.service-option input:checked+label{border-color:var(--ink);background:var(--paper)}
+.service-option input:focus-visible+label{outline:3px solid var(--biscuit);outline-offset:3px}
+.service-option .s-name{font-weight:800;display:flex;justify-content:space-between;align-items:baseline;gap:.6em}
+.service-option .s-price{font-size:.9rem;font-weight:800;color:var(--olive);white-space:nowrap}
+.service-option .s-desc{font-size:.86rem;color:var(--ink-60);margin-top:.25rem}
+@media (prefers-reduced-motion:reduce){.service-option label:hover{transform:none}}
+
+/* ============ Calendar ============ */
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+.cal-title{font-weight:800;font-size:1.15rem}
+.cal-nav{display:flex;gap:.5rem}
+.cal-nav button{
+  width:38px;height:38px;border:2px solid var(--ink);border-radius:12px;
+  background:var(--paper);color:var(--ink);cursor:pointer;font-size:1rem;font-weight:800;
+  display:grid;place-items:center;
+  transition:background-color .15s,opacity .15s;
+}
+.cal-nav button:hover{background:var(--biscuit-tint)}
+.cal-nav button:disabled{opacity:.3;cursor:not-allowed}
+
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.35rem}
+.cal-dow{
+  text-align:center;font-size:.78rem;font-weight:800;letter-spacing:.05em;
+  color:var(--ink-60);padding:.3rem 0 .5rem;
+}
+.cal-day{
+  position:relative;aspect-ratio:1;
+  border:1.5px solid transparent;border-radius:12px 13px 11px 13px;
+  background:transparent;color:var(--ink);
+  font-family:var(--font-stack);font-size:.95rem;font-weight:700;
+  cursor:pointer;display:grid;place-items:center;
+  transition:background-color .15s,border-color .15s;
+}
+.cal-day:hover:not(:disabled){background:var(--biscuit-tint);border-color:var(--line)}
+.cal-day:disabled{color:var(--ink-35);cursor:not-allowed}
+.cal-day.is-empty{visibility:hidden}
+.cal-day.is-today::after{
+  content:"";position:absolute;bottom:6px;left:50%;transform:translateX(-50%);
+  width:5px;height:5px;border-radius:50%;background:var(--biscuit);
+}
+.cal-day.is-limited::before{
+  content:"";position:absolute;top:6px;right:7px;
+  width:7px;height:7px;border-radius:50%;background:var(--toy-yellow);border:1px solid var(--ink);
+}
+.cal-day.is-full{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:var(--ink-35)}
+.cal-day.is-selected{
+  background:var(--ink);color:var(--cream);border-color:var(--ink);
+}
+.cal-day.is-selected.is-today::after{background:var(--biscuit)}
+
+.cal-legend{
+  display:flex;flex-wrap:wrap;gap:.5rem 1.3rem;margin-top:1.1rem;
+  padding-top:1rem;border-top:2px dashed var(--line);
+  font-size:.83rem;font-weight:700;color:var(--ink-60);
+}
+.cal-legend span{display:inline-flex;align-items:center;gap:.45em}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;border:1.5px solid var(--ink)}
+.dot-free{background:var(--paper)}
+.dot-limited{background:var(--toy-yellow)}
+.dot-full{background:var(--ink-35);border-color:var(--ink-35)}
+
+/* ============ Slots ============ */
+.slot-date{font-weight:800;margin-bottom:.9rem;font-size:1rem;color:var(--olive)}
+.slot-list{display:grid;gap:.7rem}
+.slot{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  border:2px solid var(--line);border-radius:14px;
+  padding:.85rem 1.1rem;background:var(--cream);
+  font-family:var(--font-stack);font-size:.97rem;font-weight:700;color:var(--ink);
+  cursor:pointer;text-align:left;width:100%;
+  transition:border-color .15s,background-color .15s;
+}
+.slot:hover:not(:disabled){border-color:var(--ink)}
+.slot:disabled{opacity:.4;cursor:not-allowed;text-decoration:line-through}
+.slot.is-selected{border-color:var(--ink);background:var(--paper)}
+.slot .t{color:var(--ink-60);font-size:.88rem;white-space:nowrap}
+.slot.is-selected .pick{color:var(--leaf);font-weight:800}
+.slot .pick{color:transparent}
+.slots-placeholder{font-size:.95rem;color:var(--ink-60);border:2px dashed var(--line);border-radius:14px;padding:1.4rem;text-align:center}
+
+/* ============ Form ============ */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media (max-width:560px){.form-grid{grid-template-columns:1fr}}
+.field{display:grid;gap:.35rem}
+.field.full{grid-column:1/-1}
+.field label{font-size:.88rem;font-weight:800}
+.field input,.field select,.field textarea{
+  font-family:var(--font-stack);font-size:.97rem;color:var(--ink);
+  background:var(--cream);border:2px solid var(--line);border-radius:12px;
+  padding:.7em .9em;width:100%;
+  transition:border-color .15s;
+}
+.field textarea{resize:vertical;min-height:88px}
+.field input:hover,.field select:hover,.field textarea:hover{border-color:var(--ink-60)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--ink);outline:none}
+.field .opt{color:var(--ink-60);font-weight:700}
+
+/* ============ Summary note ============ */
+.summary-note{
+  position:relative;margin-top:1.3rem;
+  background:var(--paper);border:1.5px solid var(--line);
+  border-radius:18px 22px 17px 21px/21px 17px 22px 18px;
+  box-shadow:var(--shadow-card);
+  padding:1.6rem 1.5rem 1.4rem;
+}
+.summary-note .tape{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%) rotate(-2deg);
+  width:84px;height:24px;background:rgba(216,168,120,.45);
+  border-radius:3px;box-shadow:0 1px 2px rgba(40,40,24,.08);
+}
+.summary-note h3{border-bottom:2px dashed var(--line);padding-bottom:.7rem;margin-bottom:.9rem;font-size:1rem}
+.summary-rows{display:grid;gap:.45rem;font-size:.95rem;margin-bottom:1.2rem}
+.summary-rows div{display:flex;justify-content:space-between;gap:1rem}
+.summary-rows dt{font-weight:800;flex:none}
+.summary-rows dd{color:var(--ink-60);text-align:right}
+.summary-actions{display:grid;gap:.7rem}
+.confirm-hint{font-size:.85rem;color:var(--ink-60);margin-top:.9rem;text-align:center}
+.confirm-hint .heart{color:var(--heart-red)}
+
+/* ============ Footer ============ */
+.site-footer{
+  background:linear-gradient(rgba(216,168,120,.18),rgba(216,168,120,.18)),var(--cream);
+  border-top:1.5px solid var(--line-soft);
+  padding:2rem 0;
+}
+.site-footer .wrap{
+  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.8rem;
+  font-size:.88rem;font-weight:700;color:var(--ink-60);
+}
+.site-footer a{color:var(--ink);text-decoration:none;font-weight:700}
+.site-footer a:hover{text-decoration:underline;text-decoration-color:var(--biscuit);text-decoration-thickness:2px}
+.site-footer .heart{color:var(--heart-red)}
+</style>
+</head>
+<body>
+
+<!-- ================= Header ================= -->
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Nook Cat Care">
+      <svg width="52" height="52" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M12 27 L32 11 L52 27 M15 27 V50 Q15 52 17 52 H47 Q49 52 49 50 V27" fill="none" stroke="#282818" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M32 8.5 C30.7 6.6 28 6.9 27.6 8.9 C27.3 10.4 29.5 12.2 32 13.8 C34.5 12.2 36.7 10.4 36.4 8.9 C36 6.9 33.3 6.6 32 8.5 Z" fill="#C81818"/>
+        <path d="M9 52 h8 l-1-7 h-6 Z" fill="#786828"/>
+        <path d="M13 45 C13 41 10.5 39.5 8.5 38.5 M13 45 C13 40 15 37.5 17.5 36.2 M13 45 V43" fill="none" stroke="#088838" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M50 28 V36" stroke="#282818" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="50" cy="39.5" r="3.6" fill="#F8C808"/>
+        <path d="M23.5 52 V40 C23.5 34 27 31.5 32 31.5 C37 31.5 40.5 34 40.5 40 V52 Z" fill="#282818"/>
+        <path d="M25.5 34.5 L24 29.5 L28.5 32 M38.5 34.5 L40 29.5 L35.5 32" fill="#282818" stroke="#282818" stroke-width="2" stroke-linejoin="round"/>
+        <circle cx="28.6" cy="40" r="2" fill="#F8F8F5"/><circle cx="35.4" cy="40" r="2" fill="#F8F8F5"/>
+        <circle cx="28.9" cy="40.3" r=".9" fill="#282818"/><circle cx="35.1" cy="40.3" r=".9" fill="#282818"/>
+      </svg>
+      <span class="brand-word"><span class="nook">Nook</span><span class="cat-care">Cat Care</span></span>
+    </a>
+
+    <div class="lang-toggle" role="group" aria-label="Language / 語言">
+      <button type="button" data-set-lang="tc" aria-pressed="true">中文</button>
+      <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+    </div>
+
+    <a class="back-link" href="index.html"><span aria-hidden="true">←</span> <span data-lang="tc">返回主頁</span><span data-lang="en">Back to home</span></a>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= Booking hero ================= -->
+<section class="booking-hero">
+  <div class="wrap">
+    <p class="eyebrow">
+      <span data-lang="tc">預約探訪 <span class="sub">Book a visit</span></span>
+      <span data-lang="en">Book a visit <span class="sub">預約探訪</span></span>
+    </p>
+    <h1><span data-lang="tc">揀個日子，我哋上門。</span><span data-lang="en">Pick a day, we'll come to them.</span></h1>
+    <p class="lede">
+      <span data-lang="tc">日曆顯示我哋而家嘅可預約情況。揀好日期時段、留低資料，我哋會喺一日之內覆實你——時間喺我哋回覆之後先算正式確認。</span>
+      <span data-lang="en">The calendar shows our current availability. Choose a date and time, leave your details, and we'll confirm within one day — a slot is only final once we've replied.</span>
+    </p>
+
+    <div class="steps-chips" aria-hidden="true">
+      <span class="chip active" id="chip-1"><span class="n"><span>1</span></span> <span data-lang="tc">揀服務</span><span data-lang="en">Choose service</span></span>
+      <span class="chip" id="chip-2"><span class="n"><span>2</span></span> <span data-lang="tc">揀日期同時段</span><span data-lang="en">Pick date &amp; time</span></span>
+      <span class="chip" id="chip-3"><span class="n"><span>3</span></span> <span data-lang="tc">留低資料</span><span data-lang="en">Your details</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Booking body ================= -->
+<section class="booking-body">
+  <div class="wrap">
+
+    <!-- Step 1: service -->
+    <div class="card">
+      <h2><span class="step-n">1</span> <span data-lang="tc">揀服務</span><span data-lang="en">Choose a service</span></h2>
+      <p class="hint">
+        <span data-lang="tc">第一次幫襯？由免費見面熟習開始——正式探訪之前，貓咪要先認識我哋。</span>
+        <span data-lang="en">First time with us? Start with the free meet &amp; greet — your cat meets us before any real visits happen.</span>
+      </p>
+      <div class="service-picker" id="service-picker">
+        <div class="service-option">
+          <input type="radio" name="service" id="svc-meet" value="meet" checked>
+          <label for="svc-meet">
+            <span class="s-name"><span><span data-lang="tc">見面熟習</span><span data-lang="en">Meet &amp; greet</span></span> <span class="s-price"><span data-lang="tc">免費</span><span data-lang="en">Free</span></span></span>
+            <span class="s-desc"><span data-lang="tc">30 分鐘家訪，認識你隻貓</span><span data-lang="en">30-minute visit to meet your cat</span></span>
+          </label>
+        </div>
+        <div class="service-option">
+          <input type="radio" name="service" id="svc-daily" value="daily">
+          <label for="svc-daily">
+            <span class="s-name"><span><span data-lang="tc">每日探訪</span><span data-lang="en">Daily visit</span></span> <span class="s-price">HK$180<span data-lang="tc">/次</span><span data-lang="en">/visit</span></span></span>
+            <span class="s-desc"><span data-lang="tc">每日一次 45 分鐘</span><span data-lang="en">One 45-minute visit a day</span></span>
+          </label>
+        </div>
+        <div class="service-option">
+          <input type="radio" name="service" id="svc-twice" value="twice">
+          <label for="svc-twice">
+            <span class="s-name"><span><span data-lang="tc">每日兩次</span><span data-lang="en">Twice daily</span></span> <span class="s-price">HK$320<span data-lang="tc">/日</span><span data-lang="en">/day</span></span></span>
+            <span class="s-desc"><span data-lang="tc">朝早同夜晚各一次</span><span data-lang="en">Morning and evening visits</span></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-grid">
+      <!-- Step 2: calendar -->
+      <div class="card">
+        <h2><span class="step-n">2</span> <span data-lang="tc">揀日期</span><span data-lang="en">Pick a date</span></h2>
+        <p class="hint">
+          <span data-lang="tc">最多可以預約兩個月之內嘅日子。</span>
+          <span data-lang="en">Bookings open up to two months ahead.</span>
+        </p>
+        <div class="cal-head">
+          <span class="cal-title" id="cal-title" aria-live="polite"></span>
+          <span class="cal-nav">
+            <button type="button" id="cal-prev" aria-label="上一個月 / Previous month">←</button>
+            <button type="button" id="cal-next" aria-label="下一個月 / Next month">→</button>
+          </span>
+        </div>
+        <div class="cal-grid" id="cal-grid" role="grid"></div>
+        <div class="cal-legend">
+          <span><span class="dot dot-free"></span> <span data-lang="tc">有位</span><span data-lang="en">Available</span></span>
+          <span><span class="dot dot-limited"></span> <span data-lang="tc">剩少量時段</span><span data-lang="en">Few slots left</span></span>
+          <span><span class="dot dot-full"></span> <span data-lang="tc">已滿</span><span data-lang="en">Fully booked</span></span>
+        </div>
+      </div>
+
+      <!-- Step 2b: slots + Step 3: details -->
+      <div>
+        <div class="card">
+          <h2><span data-lang="tc">揀時段</span><span data-lang="en">Pick a time</span></h2>
+          <div id="slot-area">
+            <p class="slots-placeholder">
+              <span data-lang="tc">先喺日曆度揀一日 🐾</span>
+              <span data-lang="en">Choose a day on the calendar first 🐾</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2><span class="step-n">3</span> <span data-lang="tc">留低資料</span><span data-lang="en">Your details</span></h2>
+          <form id="booking-form" novalidate>
+            <div class="form-grid">
+              <div class="field">
+                <label for="f-name"><span data-lang="tc">你嘅名字</span><span data-lang="en">Your name</span></label>
+                <input id="f-name" name="name" type="text" autocomplete="name" required>
+              </div>
+              <div class="field">
+                <label for="f-phone"><span data-lang="tc">電話 / WhatsApp</span><span data-lang="en">Phone / WhatsApp</span></label>
+                <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required>
+              </div>
+              <div class="field">
+                <label for="f-district"><span data-lang="tc">地區</span><span data-lang="en">District</span></label>
+                <input id="f-district" name="district" type="text" placeholder="" required>
+              </div>
+              <div class="field">
+                <label for="f-cat"><span data-lang="tc">貓咪名字同數目</span><span data-lang="en">Cat name(s) &amp; count</span></label>
+                <input id="f-cat" name="cat" type="text" required>
+              </div>
+              <div class="field full">
+                <label for="f-notes"><span data-lang="tc">備註 <span class="opt">（可以唔填）</span></span><span data-lang="en">Notes <span class="opt">(optional)</span></span></label>
+                <textarea id="f-notes" name="notes" placeholder=""></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Summary, styled like a Nook note -->
+        <div class="summary-note">
+          <span class="tape" aria-hidden="true"></span>
+          <h3><span data-lang="tc">你嘅預約</span><span data-lang="en">Your booking</span></h3>
+          <dl class="summary-rows">
+            <div><dt><span data-lang="tc">服務</span><span data-lang="en">Service</span></dt><dd id="sum-service">—</dd></div>
+            <div><dt><span data-lang="tc">日期</span><span data-lang="en">Date</span></dt><dd id="sum-date">—</dd></div>
+            <div><dt><span data-lang="tc">時段</span><span data-lang="en">Time</span></dt><dd id="sum-slot">—</dd></div>
+          </dl>
+          <div class="summary-actions">
+            <button type="button" class="btn btn-primary" id="submit-wa" disabled>
+              <span data-lang="tc">經 WhatsApp 送出預約</span><span data-lang="en">Send booking via WhatsApp</span>
+            </button>
+            <button type="button" class="btn btn-ghost" id="submit-email" disabled>
+              <span data-lang="tc">或者用 Email 送出</span><span data-lang="en">Or send by email</span>
+            </button>
+          </div>
+          <p class="confirm-hint">
+            <span data-lang="tc">我哋會喺一日之內覆實你 <span class="heart">♥</span> 時段以我哋回覆為準。</span>
+            <span data-lang="en">We'll confirm within one day <span class="heart">♥</span> Your slot is final once we reply.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<!-- ================= Footer ================= -->
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span id="year">2026</span> Nook Cat Care · <span data-lang="tc">香港</span><span data-lang="en">Hong Kong</span></span>
+    <span><a href="index.html"><span data-lang="tc">返回主頁</span><span data-lang="en">Back to home</span></a></span>
+    <span>Care that feels like home. <span class="heart">♥</span></span>
+  </div>
+</footer>
+
+<script>
+/* ================= Language ================= */
+const TITLES={
+  tc:'預約探訪｜Nook Cat Care — 香港上門貓咪照顧',
+  en:'Book a visit | Nook Cat Care — Home-visit cat sitting in Hong Kong'
+};
+const L={
+  tc:{
+    months:['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+    calTitle:(y,m)=>`${y}年${m+1}月`,
+    dows:['一','二','三','四','五','六','日'],
+    dateFmt:d=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${'日一二三四五六'[d.getDay()]}）`,
+    slots:['朝早 09:00–12:00','下晝 14:00–17:00','夜晚 18:00–21:00'],
+    twiceSlot:'朝早＋夜晚（09:00–12:00 同 18:00–21:00）',
+    picked:'已揀 ✓',full:'已滿',
+    services:{meet:'見面熟習（免費）',daily:'每日探訪（HK$180/次）',twice:'每日兩次（HK$320/日）'},
+    slotFor:d=>`你揀咗：${d}`,
+    twiceHint:'「每日兩次」會同時預留朝早同夜晚時段。',
+    waGreeting:'你好 Nook Cat Care！我想預約：',
+    labels:{service:'服務',date:'日期',slot:'時段',name:'名字',phone:'電話',district:'地區',cat:'貓咪',notes:'備註'},
+    alertMissing:'請揀好日期同時段，並填妥名字、電話、地區同貓咪資料。',
+    emailSubject:'預約探訪 — Nook Cat Care'
+  },
+  en:{
+    months:['January','February','March','April','May','June','July','August','September','October','November','December'],
+    calTitle:(y,m)=>`${L.en.months[m]} ${y}`,
+    dows:['Mo','Tu','We','Th','Fr','Sa','Su'],
+    dateFmt:d=>d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'}),
+    slots:['Morning 09:00–12:00','Afternoon 14:00–17:00','Evening 18:00–21:00'],
+    twiceSlot:'Morning + evening (09:00–12:00 & 18:00–21:00)',
+    picked:'Picked ✓',full:'Full',
+    services:{meet:'Meet & greet (free)',daily:'Daily visit (HK$180/visit)',twice:'Twice daily (HK$320/day)'},
+    slotFor:d=>`You picked: ${d}`,
+    twiceHint:'"Twice daily" reserves the morning and evening slots together.',
+    waGreeting:'Hello Nook Cat Care! I would like to book:',
+    labels:{service:'Service',date:'Date',slot:'Time',name:'Name',phone:'Phone',district:'District',cat:'Cat(s)',notes:'Notes'},
+    alertMissing:'Please pick a date and time, and fill in your name, phone, district and cat details.',
+    emailSubject:'Booking request — Nook Cat Care'
+  }
+};
+let lang='tc';
+const langButtons=document.querySelectorAll('[data-set-lang]');
+function setLang(l){
+  lang=l;
+  document.documentElement.lang=(l==='tc')?'zh-Hant':'en';
+  document.title=TITLES[l];
+  langButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.setLang===l)));
+  try{localStorage.setItem('nook-lang',l)}catch(e){}
+  renderCalendar();renderSlots();renderSummary();
+}
+langButtons.forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.setLang)));
+
+/* ================= Availability =================
+   Live mode: paste your Google Sheet "publish to web" CSV URL below.
+   Sheet columns: date (YYYY-MM-DD), morning, afternoon, evening.
+   Every day defaults to OPEN — add a row only to block slots, putting
+   any value (e.g. "x") in the slot column to block it. Fill all three
+   to mark the whole day full.
+   Demo mode: leave the URL empty and the calendar shows deterministic
+   sample data. */
+const SHEET_CSV_URL='';
+
+const blocked={}; // 'YYYY-MM-DD' -> [morning,afternoon,evening] open flags
+
+async function loadAvailability(){
+  if(!SHEET_CSV_URL)return;
+  try{
+    const res=await fetch(SHEET_CSV_URL,{cache:'no-store'});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const text=await res.text();
+    text.trim().split(/\r?\n/).slice(1).forEach(line=>{
+      const cols=line.split(',').map(s=>s.replace(/^"|"$/g,'').trim());
+      const [date,am,pm,eve]=cols;
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return;
+      blocked[date]=[!am,!pm,!eve]; // non-empty cell = blocked
+    });
+  }catch(e){
+    // If the sheet is unreachable, leave everything open — bookings are
+    // confirmed by reply anyway, so an optimistic calendar is safe.
+    console.warn('Availability sheet failed to load; showing all slots open.',e);
+  }
+  renderCalendar();renderSlots();renderSummary();
+}
+
+function dayHash(y,m,d){
+  let h=(y*373+ (m+1)*2777 + d*7919)>>>0;
+  h^=h<<13;h>>>=0;h^=h>>7;h^=h<<17;h>>>=0;
+  return h;
+}
+const today=new Date();today.setHours(0,0,0,0);
+const maxDate=new Date(today.getFullYear(),today.getMonth()+2,0); // end of month, 2 months out
+
+function dayInfo(y,m,d){
+  const date=new Date(y,m,d);
+  if(date<today||date>maxDate)return{state:'past',slots:[false,false,false]};
+  let slots;
+  if(SHEET_CSV_URL){
+    const key=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    slots=blocked[key]?blocked[key].slice():[true,true,true];
+  }else{
+    const h=dayHash(y,m,d);
+    if(h%9===0)return{state:'full',slots:[false,false,false]};
+    slots=[ (h>>3)%5!==0, (h>>6)%4!==0, (h>>9)%5!==0 ];
+  }
+  if(!slots.some(Boolean))return{state:'full',slots};
+  const open=slots.filter(Boolean).length;
+  return{state:open===1?'limited':'free',slots};
+}
+
+/* ================= State ================= */
+let viewY=today.getFullYear(),viewM=today.getMonth();
+let selDate=null,selSlot=null; // selSlot: 0/1/2 or 'twice'
+
+function currentService(){return document.querySelector('input[name="service"]:checked').value}
+
+/* ================= Calendar ================= */
+const calGrid=document.getElementById('cal-grid');
+const calTitle=document.getElementById('cal-title');
+const btnPrev=document.getElementById('cal-prev');
+const btnNext=document.getElementById('cal-next');
+
+function renderCalendar(){
+  const t=L[lang];
+  calTitle.textContent=t.calTitle(viewY,viewM);
+  calGrid.innerHTML='';
+  t.dows.forEach(d=>{
+    const el=document.createElement('span');
+    el.className='cal-dow';el.textContent=d;calGrid.appendChild(el);
+  });
+  const first=new Date(viewY,viewM,1);
+  const lead=(first.getDay()+6)%7; // Monday start
+  for(let i=0;i<lead;i++){
+    const el=document.createElement('span');
+    el.className='cal-day is-empty';calGrid.appendChild(el);
+  }
+  const days=new Date(viewY,viewM+1,0).getDate();
+  for(let d=1;d<=days;d++){
+    const info=dayInfo(viewY,viewM,d);
+    const el=document.createElement('button');
+    el.type='button';el.className='cal-day';el.textContent=d;
+    const isToday=(viewY===today.getFullYear()&&viewM===today.getMonth()&&d===today.getDate());
+    if(isToday)el.classList.add('is-today');
+    if(info.state==='past'){el.disabled=true;}
+    else if(info.state==='full'){el.disabled=true;el.classList.add('is-full');}
+    else{
+      if(info.state==='limited')el.classList.add('is-limited');
+      el.addEventListener('click',()=>{
+        selDate=new Date(viewY,viewM,d);selSlot=null;
+        renderCalendar();renderSlots();renderSummary();
+        document.getElementById('slot-area').scrollIntoView({behavior:'smooth',block:'nearest'});
+      });
+    }
+    if(selDate&&selDate.getFullYear()===viewY&&selDate.getMonth()===viewM&&selDate.getDate()===d){
+      el.classList.add('is-selected');
+    }
+    calGrid.appendChild(el);
+  }
+  btnPrev.disabled=(viewY===today.getFullYear()&&viewM===today.getMonth());
+  btnNext.disabled=(viewY===maxDate.getFullYear()&&viewM===maxDate.getMonth());
+}
+btnPrev.addEventListener('click',()=>{viewM--;if(viewM<0){viewM=11;viewY--;}renderCalendar();});
+btnNext.addEventListener('click',()=>{viewM++;if(viewM>11){viewM=0;viewY++;}renderCalendar();});
+
+/* ================= Slots ================= */
+const slotArea=document.getElementById('slot-area');
+
+function renderSlots(){
+  const t=L[lang];
+  if(!selDate){
+    slotArea.innerHTML=`<p class="slots-placeholder">${lang==='tc'?'先喺日曆度揀一日 🐾':'Choose a day on the calendar first 🐾'}</p>`;
+    return;
+  }
+  const info=dayInfo(selDate.getFullYear(),selDate.getMonth(),selDate.getDate());
+  const svc=currentService();
+  let html=`<p class="slot-date">${t.slotFor(t.dateFmt(selDate))}</p><div class="slot-list">`;
+  if(svc==='twice'){
+    const ok=info.slots[0]&&info.slots[2];
+    html+=`<button type="button" class="slot ${selSlot==='twice'?'is-selected':''}" data-slot="twice" ${ok?'':'disabled'}>
+      <span>${t.twiceSlot}</span><span class="${selSlot==='twice'?'pick':'t'}">${selSlot==='twice'?t.picked:(ok?'':t.full)}</span></button>`;
+    html+=`</div><p class="hint" style="margin:.9rem 0 0">${t.twiceHint}</p>`;
+  }else{
+    t.slots.forEach((label,i)=>{
+      const ok=info.slots[i];
+      html+=`<button type="button" class="slot ${selSlot===i?'is-selected':''}" data-slot="${i}" ${ok?'':'disabled'}>
+        <span>${label}</span><span class="${selSlot===i?'pick':'t'}">${selSlot===i?t.picked:(ok?'':t.full)}</span></button>`;
+    });
+    html+='</div>';
+  }
+  slotArea.innerHTML=html;
+  slotArea.querySelectorAll('.slot:not(:disabled)').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const v=b.dataset.slot;
+      selSlot=(v==='twice')?'twice':Number(v);
+      renderSlots();renderSummary();
+    });
+  });
+}
+
+/* Service change resets slot (availability rules differ) */
+document.getElementById('service-picker').addEventListener('change',()=>{
+  selSlot=null;renderSlots();renderSummary();
+});
+
+/* ================= Summary + progress chips ================= */
+const sumService=document.getElementById('sum-service');
+const sumDate=document.getElementById('sum-date');
+const sumSlot=document.getElementById('sum-slot');
+const btnWA=document.getElementById('submit-wa');
+const btnEmail=document.getElementById('submit-email');
+
+function slotLabel(){
+  const t=L[lang];
+  if(selSlot===null)return null;
+  return selSlot==='twice'?t.twiceSlot:t.slots[selSlot];
+}
+function renderSummary(){
+  const t=L[lang];
+  sumService.textContent=t.services[currentService()];
+  sumDate.textContent=selDate?t.dateFmt(selDate):'—';
+  sumSlot.textContent=slotLabel()||'—';
+  const ready=selDate&&selSlot!==null;
+  btnWA.disabled=!ready;btnEmail.disabled=!ready;
+  document.getElementById('chip-1').className='chip done';
+  document.getElementById('chip-2').className='chip '+(ready?'done':'active');
+  document.getElementById('chip-3').className='chip '+(ready?'active':'');
+}
+
+/* ================= Submit ================= */
+function buildMessage(){
+  const t=L[lang];
+  const f=id=>document.getElementById(id).value.trim();
+  const required=['f-name','f-phone','f-district','f-cat'];
+  if(!selDate||selSlot===null||required.some(id=>!document.getElementById(id).value.trim())){
+    alert(t.alertMissing);return null;
+  }
+  const lines=[
+    t.waGreeting,
+    `${t.labels.service}: ${t.services[currentService()]}`,
+    `${t.labels.date}: ${t.dateFmt(selDate)}`,
+    `${t.labels.slot}: ${slotLabel()}`,
+    `${t.labels.name}: ${f('f-name')}`,
+    `${t.labels.phone}: ${f('f-phone')}`,
+    `${t.labels.district}: ${f('f-district')}`,
+    `${t.labels.cat}: ${f('f-cat')}`
+  ];
+  const notes=f('f-notes');
+  if(notes)lines.push(`${t.labels.notes}: ${notes}`);
+  return lines.join('\n');
+}
+btnWA.addEventListener('click',()=>{
+  const msg=buildMessage();
+  if(msg)window.open('https://wa.me/85212345678?text='+encodeURIComponent(msg),'_blank','noopener');
+});
+btnEmail.addEventListener('click',()=>{
+  const msg=buildMessage();
+  if(msg)location.href='mailto:hello@nookcatcare.com?subject='+encodeURIComponent(L[lang].emailSubject)+'&body='+encodeURIComponent(msg);
+});
+
+/* ================= Init ================= */
+try{
+  const saved=localStorage.getItem('nook-lang');
+  if(saved==='en'||saved==='tc')lang=saved;
+}catch(e){}
+setLang(lang);
+loadAvailability();
+document.getElementById('year').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
