@@ -226,6 +226,7 @@ h3{font-size:1.1rem;letter-spacing:0}
 
 /* ============ Slots ============ */
 .slot-date{font-weight:800;margin-bottom:.9rem;font-size:1rem;color:var(--olive)}
+.slot-list+.slot-date{margin-top:1.4rem;padding-top:1.2rem;border-top:2px dashed var(--line)}
 .slot-list{display:grid;gap:.7rem}
 .slot{
   display:flex;align-items:center;justify-content:space-between;gap:1rem;
@@ -372,14 +373,14 @@ h3{font-size:1.1rem;letter-spacing:0}
         <div class="service-option">
           <input type="radio" name="service" id="svc-daily" value="daily">
           <label for="svc-daily">
-            <span class="s-name"><span><span data-lang="tc">每日探訪</span><span data-lang="en">Daily visit</span></span> <span class="s-price">HK$180<span data-lang="tc">/次</span><span data-lang="en">/visit</span></span></span>
-            <span class="s-desc"><span data-lang="tc">每日一次 45 分鐘</span><span data-lang="en">One 45-minute visit a day</span></span>
+            <span class="s-name"><span><span data-lang="tc">每日探訪</span><span data-lang="en">Daily visit</span></span> <span class="s-price">HK$200<span data-lang="tc">/次</span><span data-lang="en">/visit</span></span></span>
+            <span class="s-desc"><span data-lang="tc">每日一次 45 分鐘 · 兩日或以上每次 HK$180</span><span data-lang="en">One 45-min visit a day · HK$180/visit for 2+ days</span></span>
           </label>
         </div>
         <div class="service-option">
           <input type="radio" name="service" id="svc-twice" value="twice">
           <label for="svc-twice">
-            <span class="s-name"><span><span data-lang="tc">每日兩次</span><span data-lang="en">Twice daily</span></span> <span class="s-price">HK$320<span data-lang="tc">/日</span><span data-lang="en">/day</span></span></span>
+            <span class="s-name"><span><span data-lang="tc">每日兩次</span><span data-lang="en">Twice daily</span></span> <span class="s-price">HK$360<span data-lang="tc">/日</span><span data-lang="en">/day</span></span></span>
             <span class="s-desc"><span data-lang="tc">朝早同夜晚各一次</span><span data-lang="en">Morning and evening visits</span></span>
           </label>
         </div>
@@ -389,10 +390,10 @@ h3{font-size:1.1rem;letter-spacing:0}
     <div class="booking-grid">
       <!-- Step 2: calendar -->
       <div class="card">
-        <h2><span class="step-n">2</span> <span data-lang="tc">揀日期</span><span data-lang="en">Pick a date</span></h2>
+        <h2><span class="step-n">2</span> <span data-lang="tc">揀日期</span><span data-lang="en">Pick your days</span></h2>
         <p class="hint">
-          <span data-lang="tc">最多可以預約兩個月之內嘅日子。</span>
-          <span data-lang="en">Bookings open up to two months ahead.</span>
+          <span data-lang="tc">去旅行要幾日？逐日撳落去就得——再撳一次取消。最多可以預約兩個月之內嘅日子。</span>
+          <span data-lang="en">Away for a few days? Tap each day you need — tap again to unselect. Bookings open up to two months ahead.</span>
         </p>
         <div class="cal-head">
           <span class="cal-title" id="cal-title" aria-live="polite"></span>
@@ -459,8 +460,9 @@ h3{font-size:1.1rem;letter-spacing:0}
           <h3><span data-lang="tc">你嘅預約</span><span data-lang="en">Your booking</span></h3>
           <dl class="summary-rows">
             <div><dt><span data-lang="tc">服務</span><span data-lang="en">Service</span></dt><dd id="sum-service">—</dd></div>
-            <div><dt><span data-lang="tc">日期</span><span data-lang="en">Date</span></dt><dd id="sum-date">—</dd></div>
+            <div><dt><span data-lang="tc">日期</span><span data-lang="en">Days</span></dt><dd id="sum-date">—</dd></div>
             <div><dt><span data-lang="tc">時段</span><span data-lang="en">Time</span></dt><dd id="sum-slot">—</dd></div>
+            <div><dt><span data-lang="tc">預計費用</span><span data-lang="en">Est. total</span></dt><dd id="sum-total">—</dd></div>
           </dl>
           <div class="summary-actions">
             <button type="button" class="btn btn-primary" id="submit-wa" disabled>
@@ -508,12 +510,17 @@ const L={
     slots:['朝早 09:00–12:00','下晝 14:00–17:00','夜晚 18:00–21:00'],
     twiceSlot:'朝早＋夜晚（09:00–12:00 同 18:00–21:00）',
     picked:'已揀 ✓',full:'已滿',
-    services:{meet:'見面熟習（免費）',daily:'每日探訪（HK$180/次）',twice:'每日兩次（HK$320/日）'},
-    slotFor:d=>`你揀咗：${d}`,
+    services:{meet:'見面熟習（免費）',daily:'每日探訪',twice:'每日兩次'},
+    dateShort:d=>`${d.getMonth()+1}月${d.getDate()}日`,
+    joiner:'、',
+    days:n=>`${n} 日`,
+    chosenSuffix:'日已揀時段',
+    perDay:'逐日唔同（詳情喺訊息入面）',
+    free:'免費',
     twiceHint:'「每日兩次」會同時預留朝早同夜晚時段。',
     waGreeting:'你好 Nook Cat Care！我想預約：',
-    labels:{service:'服務',date:'日期',slot:'時段',name:'名字',phone:'電話',email:'Email',district:'地區',cat:'貓咪',notes:'備註'},
-    alertMissing:'請揀好日期同時段，並填妥名字、電話、地區同貓咪資料。',
+    labels:{service:'服務',date:'日期',slot:'時段',days:'日數',total:'預計費用',name:'名字',phone:'電話',email:'Email',district:'地區',cat:'貓咪',notes:'備註'},
+    alertMissing:'請至少揀一日，幫每一日揀好時段，並填妥名字、電話、地區同貓咪資料。',
     emailSubject:'預約探訪 — Nook Cat Care',
     sending:'傳送緊……',
     sent:'已送出！我哋會喺一日之內覆實你 ♥',
@@ -527,12 +534,17 @@ const L={
     slots:['Morning 09:00–12:00','Afternoon 14:00–17:00','Evening 18:00–21:00'],
     twiceSlot:'Morning + evening (09:00–12:00 & 18:00–21:00)',
     picked:'Picked ✓',full:'Full',
-    services:{meet:'Meet & greet (free)',daily:'Daily visit (HK$180/visit)',twice:'Twice daily (HK$320/day)'},
-    slotFor:d=>`You picked: ${d}`,
+    services:{meet:'Meet & greet (free)',daily:'Daily visit',twice:'Twice daily'},
+    dateShort:d=>d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}),
+    joiner:', ',
+    days:n=>`${n} day${n>1?'s':''}`,
+    chosenSuffix:'days have a time',
+    perDay:'Varies per day (details in the message)',
+    free:'Free',
     twiceHint:'"Twice daily" reserves the morning and evening slots together.',
     waGreeting:'Hello Nook Cat Care! I would like to book:',
-    labels:{service:'Service',date:'Date',slot:'Time',name:'Name',phone:'Phone',email:'Email',district:'District',cat:'Cat(s)',notes:'Notes'},
-    alertMissing:'Please pick a date and time, and fill in your name, phone, district and cat details.',
+    labels:{service:'Service',date:'Date',slot:'Time',days:'Days',total:'Est. total',name:'Name',phone:'Phone',email:'Email',district:'District',cat:'Cat(s)',notes:'Notes'},
+    alertMissing:'Please pick at least one day, choose a time for each, and fill in your name, phone, district and cat details.',
     emailSubject:'Booking request — Nook Cat Care',
     sending:'Sending…',
     sent:'Sent! We\'ll confirm within one day ♥',
@@ -610,9 +622,22 @@ function dayInfo(y,m,d){
 
 /* ================= State ================= */
 let viewY=today.getFullYear(),viewM=today.getMonth();
-let selDate=null,selSlot=null; // selSlot: 0/1/2 or 'twice'
+// Selected days: 'YYYY-MM-DD' -> chosen slot (0/1/2, 'twice', or null while unpicked)
+const sel=new Map();
 
+function keyOf(y,m,d){return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`}
+function parseKey(k){const[a,b,c]=k.split('-').map(Number);return new Date(a,b-1,c)}
 function currentService(){return document.querySelector('input[name="service"]:checked').value}
+
+/* Pricing: HK$200/visit for a single day, HK$180/visit for 2+ days,
+   twice daily HK$360/day, meet & greet free. */
+function priceText(){
+  const t=L[lang],n=sel.size,svc=currentService();
+  if(!n)return '—';
+  if(svc==='meet')return t.free;
+  const rate=(svc==='twice')?360:(n>=2?180:200);
+  return `HK$${rate*n}（${t.days(n)} × HK$${rate}）`;
+}
 
 /* ================= Calendar ================= */
 const calGrid=document.getElementById('cal-grid');
@@ -646,14 +671,16 @@ function renderCalendar(){
     else{
       if(info.state==='limited')el.classList.add('is-limited');
       el.addEventListener('click',()=>{
-        selDate=new Date(viewY,viewM,d);selSlot=null;
+        const key=keyOf(viewY,viewM,d);
+        if(sel.has(key)){sel.delete(key);}
+        else{
+          if(currentService()==='meet')sel.clear(); // meet & greet is a single visit
+          sel.set(key,null);
+        }
         renderCalendar();renderSlots();renderSummary();
-        document.getElementById('slot-area').scrollIntoView({behavior:'smooth',block:'nearest'});
       });
     }
-    if(selDate&&selDate.getFullYear()===viewY&&selDate.getMonth()===viewM&&selDate.getDate()===d){
-      el.classList.add('is-selected');
-    }
+    if(sel.has(keyOf(viewY,viewM,d)))el.classList.add('is-selected');
     calGrid.appendChild(el);
   }
   btnPrev.disabled=(viewY===today.getFullYear()&&viewM===today.getMonth());
@@ -667,78 +694,107 @@ const slotArea=document.getElementById('slot-area');
 
 function renderSlots(){
   const t=L[lang];
-  if(!selDate){
-    slotArea.innerHTML=`<p class="slots-placeholder">${lang==='tc'?'先喺日曆度揀一日 🐾':'Choose a day on the calendar first 🐾'}</p>`;
+  const keys=[...sel.keys()].sort();
+  if(!keys.length){
+    slotArea.innerHTML=`<p class="slots-placeholder">${lang==='tc'?'先喺日曆度揀返啲日子 🐾':'Choose your days on the calendar first 🐾'}</p>`;
     return;
   }
-  const info=dayInfo(selDate.getFullYear(),selDate.getMonth(),selDate.getDate());
   const svc=currentService();
-  let html=`<p class="slot-date">${t.slotFor(t.dateFmt(selDate))}</p><div class="slot-list">`;
-  if(svc==='twice'){
-    const ok=info.slots[0]&&info.slots[2];
-    html+=`<button type="button" class="slot ${selSlot==='twice'?'is-selected':''}" data-slot="twice" ${ok?'':'disabled'}>
-      <span>${t.twiceSlot}</span><span class="${selSlot==='twice'?'pick':'t'}">${selSlot==='twice'?t.picked:(ok?'':t.full)}</span></button>`;
-    html+=`</div><p class="hint" style="margin:.9rem 0 0">${t.twiceHint}</p>`;
-  }else{
-    t.slots.forEach((label,i)=>{
-      const ok=info.slots[i];
-      html+=`<button type="button" class="slot ${selSlot===i?'is-selected':''}" data-slot="${i}" ${ok?'':'disabled'}>
-        <span>${label}</span><span class="${selSlot===i?'pick':'t'}">${selSlot===i?t.picked:(ok?'':t.full)}</span></button>`;
-    });
+  let html='';
+  keys.forEach(k=>{
+    const dte=parseKey(k);
+    const info=dayInfo(dte.getFullYear(),dte.getMonth(),dte.getDate());
+    const chosen=sel.get(k);
+    html+=`<p class="slot-date">${t.dateFmt(dte)}</p><div class="slot-list">`;
+    if(svc==='twice'){
+      const ok=info.slots[0]&&info.slots[2];
+      const isSel=chosen==='twice';
+      html+=`<button type="button" class="slot ${isSel?'is-selected':''}" data-date="${k}" data-slot="twice" ${ok?'':'disabled'}>
+        <span>${t.twiceSlot}</span><span class="${isSel?'pick':'t'}">${isSel?t.picked:(ok?'':t.full)}</span></button>`;
+    }else{
+      t.slots.forEach((label,i)=>{
+        const ok=info.slots[i];
+        const isSel=chosen===i;
+        html+=`<button type="button" class="slot ${isSel?'is-selected':''}" data-date="${k}" data-slot="${i}" ${ok?'':'disabled'}>
+          <span>${label}</span><span class="${isSel?'pick':'t'}">${isSel?t.picked:(ok?'':t.full)}</span></button>`;
+      });
+    }
     html+='</div>';
-  }
+  });
+  if(svc==='twice')html+=`<p class="hint" style="margin:.9rem 0 0">${t.twiceHint}</p>`;
   slotArea.innerHTML=html;
   slotArea.querySelectorAll('.slot:not(:disabled)').forEach(b=>{
     b.addEventListener('click',()=>{
       const v=b.dataset.slot;
-      selSlot=(v==='twice')?'twice':Number(v);
+      sel.set(b.dataset.date,v==='twice'?'twice':Number(v));
       renderSlots();renderSummary();
     });
   });
 }
 
-/* Service change resets slot (availability rules differ) */
+/* Service change: keep the chosen days (trimmed to one for meet & greet,
+   which is a single visit) but reset times, since slot rules differ. */
 document.getElementById('service-picker').addEventListener('change',()=>{
-  selSlot=null;renderSlots();renderSummary();
+  if(currentService()==='meet'&&sel.size>1){
+    const first=[...sel.keys()].sort()[0];
+    sel.clear();sel.set(first,null);
+  }
+  for(const k of sel.keys())sel.set(k,null);
+  renderCalendar();renderSlots();renderSummary();
 });
 
 /* ================= Summary + progress chips ================= */
 const sumService=document.getElementById('sum-service');
 const sumDate=document.getElementById('sum-date');
 const sumSlot=document.getElementById('sum-slot');
+const sumTotal=document.getElementById('sum-total');
 const btnWA=document.getElementById('submit-wa');
 const btnEmail=document.getElementById('submit-email');
 
-function slotLabel(){
-  const t=L[lang];
-  if(selSlot===null)return null;
-  return selSlot==='twice'?t.twiceSlot:t.slots[selSlot];
+function slotLabelFor(k){
+  const t=L[lang],v=sel.get(k);
+  if(v===null)return null;
+  return v==='twice'?t.twiceSlot:t.slots[v];
 }
 function renderSummary(){
   const t=L[lang];
+  const keys=[...sel.keys()].sort();
+  const chosen=keys.filter(k=>sel.get(k)!==null);
   sumService.textContent=t.services[currentService()];
-  sumDate.textContent=selDate?t.dateFmt(selDate):'—';
-  sumSlot.textContent=slotLabel()||'—';
-  const ready=selDate&&selSlot!==null&&!sent;
+  sumDate.textContent=keys.length?keys.map(k=>t.dateShort(parseKey(k))).join(t.joiner):'—';
+  let slotTxt='—';
+  if(keys.length){
+    if(chosen.length<keys.length)slotTxt=`${chosen.length}/${keys.length} ${t.chosenSuffix}`;
+    else{
+      const labels=[...new Set(keys.map(slotLabelFor))];
+      slotTxt=labels.length===1?labels[0]:t.perDay;
+    }
+  }
+  sumSlot.textContent=slotTxt;
+  sumTotal.textContent=priceText();
+  const complete=keys.length>0&&chosen.length===keys.length;
+  const ready=complete&&!sent;
   btnWA.disabled=!ready;btnEmail.disabled=!ready;
   document.getElementById('chip-1').className='chip done';
-  document.getElementById('chip-2').className='chip '+(ready?'done':'active');
-  document.getElementById('chip-3').className='chip '+(ready?'active':'');
+  document.getElementById('chip-2').className='chip '+(complete?'done':'active');
+  document.getElementById('chip-3').className='chip '+(complete?'active':'');
 }
 
 /* ================= Submit ================= */
 function buildMessage(){
   const t=L[lang];
   const f=id=>document.getElementById(id).value.trim();
+  const keys=[...sel.keys()].sort();
   const required=['f-name','f-phone','f-district','f-cat'];
-  if(!selDate||selSlot===null||required.some(id=>!document.getElementById(id).value.trim())){
+  if(!keys.length||keys.some(k=>sel.get(k)===null)||required.some(id=>!document.getElementById(id).value.trim())){
     alert(t.alertMissing);return null;
   }
   const lines=[
     t.waGreeting,
     `${t.labels.service}: ${t.services[currentService()]}`,
-    `${t.labels.date}: ${t.dateFmt(selDate)}`,
-    `${t.labels.slot}: ${slotLabel()}`,
+    ...keys.map(k=>`- ${t.dateFmt(parseKey(k))}: ${slotLabelFor(k)}`),
+    `${t.labels.days}: ${t.days(keys.length)}`,
+    `${t.labels.total}: ${priceText()}`,
     `${t.labels.name}: ${f('f-name')}`,
     `${t.labels.phone}: ${f('f-phone')}`,
     `${t.labels.district}: ${f('f-district')}`,
