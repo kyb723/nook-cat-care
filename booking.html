@@ -434,6 +434,10 @@ h3{font-size:1.1rem;letter-spacing:0}
                 <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required>
               </div>
               <div class="field">
+                <label for="f-email"><span data-lang="tc">Email <span class="opt">（可以唔填）</span></span><span data-lang="en">Email <span class="opt">(optional)</span></span></label>
+                <input id="f-email" name="email" type="email" autocomplete="email">
+              </div>
+              <div class="field">
                 <label for="f-district"><span data-lang="tc">地區</span><span data-lang="en">District</span></label>
                 <input id="f-district" name="district" type="text" placeholder="" required>
               </div>
@@ -466,6 +470,7 @@ h3{font-size:1.1rem;letter-spacing:0}
               <span data-lang="tc">或者用 Email 送出</span><span data-lang="en">Or send by email</span>
             </button>
           </div>
+          <p class="confirm-hint" id="send-status" hidden aria-live="polite"></p>
           <p class="confirm-hint">
             <span data-lang="tc">我哋會喺一日之內覆實你 <span class="heart">♥</span> 時段以我哋回覆為準。</span>
             <span data-lang="en">We'll confirm within one day <span class="heart">♥</span> Your slot is final once we reply.</span>
@@ -507,9 +512,12 @@ const L={
     slotFor:d=>`你揀咗：${d}`,
     twiceHint:'「每日兩次」會同時預留朝早同夜晚時段。',
     waGreeting:'你好 Nook Cat Care！我想預約：',
-    labels:{service:'服務',date:'日期',slot:'時段',name:'名字',phone:'電話',district:'地區',cat:'貓咪',notes:'備註'},
+    labels:{service:'服務',date:'日期',slot:'時段',name:'名字',phone:'電話',email:'Email',district:'地區',cat:'貓咪',notes:'備註'},
     alertMissing:'請揀好日期同時段，並填妥名字、電話、地區同貓咪資料。',
-    emailSubject:'預約探訪 — Nook Cat Care'
+    emailSubject:'預約探訪 — Nook Cat Care',
+    sending:'傳送緊……',
+    sent:'已送出！我哋會喺一日之內覆實你 ♥',
+    sendFail:'唔好意思，送唔到。請再試一次，或者直接 WhatsApp 我哋。'
   },
   en:{
     months:['January','February','March','April','May','June','July','August','September','October','November','December'],
@@ -523,9 +531,12 @@ const L={
     slotFor:d=>`You picked: ${d}`,
     twiceHint:'"Twice daily" reserves the morning and evening slots together.',
     waGreeting:'Hello Nook Cat Care! I would like to book:',
-    labels:{service:'Service',date:'Date',slot:'Time',name:'Name',phone:'Phone',district:'District',cat:'Cat(s)',notes:'Notes'},
+    labels:{service:'Service',date:'Date',slot:'Time',name:'Name',phone:'Phone',email:'Email',district:'District',cat:'Cat(s)',notes:'Notes'},
     alertMissing:'Please pick a date and time, and fill in your name, phone, district and cat details.',
-    emailSubject:'Booking request — Nook Cat Care'
+    emailSubject:'Booking request — Nook Cat Care',
+    sending:'Sending…',
+    sent:'Sent! We\'ll confirm within one day ♥',
+    sendFail:'Sorry, that didn\'t send. Please try again, or message us on WhatsApp.'
   }
 };
 let lang='tc';
@@ -708,7 +719,7 @@ function renderSummary(){
   sumService.textContent=t.services[currentService()];
   sumDate.textContent=selDate?t.dateFmt(selDate):'—';
   sumSlot.textContent=slotLabel()||'—';
-  const ready=selDate&&selSlot!==null;
+  const ready=selDate&&selSlot!==null&&!sent;
   btnWA.disabled=!ready;btnEmail.disabled=!ready;
   document.getElementById('chip-1').className='chip done';
   document.getElementById('chip-2').className='chip '+(ready?'done':'active');
@@ -733,6 +744,8 @@ function buildMessage(){
     `${t.labels.district}: ${f('f-district')}`,
     `${t.labels.cat}: ${f('f-cat')}`
   ];
+  const email=f('f-email');
+  if(email)lines.push(`${t.labels.email}: ${email}`);
   const notes=f('f-notes');
   if(notes)lines.push(`${t.labels.notes}: ${notes}`);
   return lines.join('\n');
@@ -741,9 +754,38 @@ btnWA.addEventListener('click',()=>{
   const msg=buildMessage();
   if(msg)window.open('https://wa.me/85212345678?text='+encodeURIComponent(msg),'_blank','noopener');
 });
-btnEmail.addEventListener('click',()=>{
+
+/* Email path: delivered by Web3Forms, so it works even when the
+   visitor has no mail app configured. */
+const WEB3FORMS_KEY='59567fef-b27e-4597-8b8c-94f7bb2309d0';
+const statusEl=document.getElementById('send-status');
+let sent=false;
+btnEmail.addEventListener('click',async()=>{
   const msg=buildMessage();
-  if(msg)location.href='mailto:hello@nookcatcare.com?subject='+encodeURIComponent(L[lang].emailSubject)+'&body='+encodeURIComponent(msg);
+  if(!msg)return;
+  const t=L[lang];
+  btnEmail.disabled=true;btnWA.disabled=true;
+  statusEl.hidden=false;statusEl.textContent=t.sending;
+  try{
+    const res=await fetch('https://api.web3forms.com/submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify({
+        access_key:WEB3FORMS_KEY,
+        subject:t.emailSubject,
+        from_name:document.getElementById('f-name').value.trim(),
+        email:document.getElementById('f-email').value.trim()||undefined,
+        message:msg
+      })
+    });
+    const data=await res.json();
+    if(!data.success)throw new Error(data.message||'submit failed');
+    sent=true;
+    statusEl.textContent=t.sent;
+  }catch(e){
+    statusEl.textContent=t.sendFail;
+    btnEmail.disabled=false;btnWA.disabled=false;
+  }
 });
 
 /* ================= Init ================= */
