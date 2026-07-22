@@ -359,22 +359,22 @@ h3{font-size:1.1rem;letter-spacing:0}
     <div class="card">
       <h2><span class="step-n">1</span> <span data-lang="tc">揀服務</span><span data-lang="en">Choose a service</span></h2>
       <p class="hint">
-        <span data-lang="tc">第一次幫襯？由免費見面熟習開始——正式探訪之前，貓咪要先認識我哋。</span>
-        <span data-lang="en">First time with us? Start with the free meet &amp; greet — your cat meets us before any real visits happen.</span>
+        <span data-lang="tc">第一次幫襯？由一日探訪開始——貓咪可先認識我哋。</span>
+        <span data-lang="en">First time with us? Start with the One day pass — your cat meets us before any real visits happen.</span>
       </p>
       <div class="service-picker" id="service-picker">
         <div class="service-option">
-          <input type="radio" name="service" id="svc-meet" value="meet" checked>
-          <label for="svc-meet">
-            <span class="s-name"><span><span data-lang="tc">見面熟習</span><span data-lang="en">Meet &amp; greet</span></span> <span class="s-price"><span data-lang="tc">免費</span><span data-lang="en">Free</span></span></span>
-            <span class="s-desc"><span data-lang="tc">30 分鐘家訪，認識你隻貓</span><span data-lang="en">30-minute visit to meet your cat</span></span>
+          <input type="radio" name="service" id="svc-one" value="one" checked>
+          <label for="svc-one">
+            <span class="s-name"><span><span data-lang="tc">一日探訪</span><span data-lang="en">One day pass</span></span> <span class="s-price">HK$200<span data-lang="tc">/次</span><span data-lang="en">/visit</span></span></span>
+            <span class="s-desc"><span data-lang="tc">30-45 分鐘探訪，認識你隻貓</span><span data-lang="en">30-45 minutes visit to meet your cat</span></span>
           </label>
         </div>
         <div class="service-option">
           <input type="radio" name="service" id="svc-daily" value="daily">
           <label for="svc-daily">
-            <span class="s-name"><span><span data-lang="tc">每日探訪</span><span data-lang="en">Daily visit</span></span> <span class="s-price">HK$200<span data-lang="tc">/次</span><span data-lang="en">/visit</span></span></span>
-            <span class="s-desc"><span data-lang="tc">每日一次 45 分鐘 · 兩日或以上每次 HK$180</span><span data-lang="en">One 45-min visit a day · HK$180/visit for 2+ days</span></span>
+            <span class="s-name"><span><span data-lang="tc">每日探訪</span><span data-lang="en">Daily visit</span></span> <span class="s-price">HK$180<span data-lang="tc">/次</span><span data-lang="en">/visit</span></span></span>
+            <span class="s-desc"><span data-lang="tc">每日 30-45 分鐘 · 兩日或以上每次 HK$180</span><span data-lang="en">One 30-45 min visit a day · HK$180/visit for 2+ days</span></span>
           </label>
         </div>
         <div class="service-option">
@@ -443,7 +443,11 @@ h3{font-size:1.1rem;letter-spacing:0}
                 <input id="f-district" name="district" type="text" placeholder="" required>
               </div>
               <div class="field">
-                <label for="f-cat"><span data-lang="tc">貓咪名字同數目</span><span data-lang="en">Cat name(s) &amp; count</span></label>
+                <label for="f-cat-count"><span data-lang="tc">貓咪數目</span><span data-lang="en">Cat count</span></label>
+                <input id="f-cat-count" name="cat_count" type="text" required>
+              </div>
+              <div class="field">
+                <label for="f-cat"><span data-lang="tc">貓咪名字</span><span data-lang="en">Cat name(s)</span></label>
                 <input id="f-cat" name="cat" type="text" required>
               </div>
               <div class="field full">
@@ -510,7 +514,7 @@ const L={
     slots:['朝早 09:00–12:00','下晝 14:00–17:00','夜晚 18:00–21:00'],
     twiceSlot:'朝早＋夜晚（09:00–12:00 同 18:00–21:00）',
     picked:'已揀 ✓',full:'已滿',
-    services:{meet:'見面熟習（免費）',daily:'每日探訪',twice:'每日兩次'},
+    services:{one:'一日探訪',daily:'每日探訪',twice:'每日兩次'},
     dateShort:d=>`${d.getMonth()+1}月${d.getDate()}日`,
     joiner:'、',
     days:n=>`${n} 日`,
@@ -519,7 +523,7 @@ const L={
     free:'免費',
     twiceHint:'「每日兩次」會同時預留朝早同夜晚時段。',
     waGreeting:'你好 Nook Cat Care！我想預約：',
-    labels:{service:'服務',date:'日期',slot:'時段',days:'日數',total:'預計費用',name:'名字',phone:'電話',email:'Email',district:'地區',cat:'貓咪',notes:'備註'},
+    labels:{service:'服務',date:'日期',slot:'時段',days:'日數',total:'預計費用',name:'名字',phone:'電話',email:'Email',district:'地區',catCount:'貓咪數目',cat:'貓咪名字',notes:'備註'},
     alertMissing:'請至少揀一日，幫每一日揀好時段，並填妥名字、電話、地區同貓咪資料。',
     emailSubject:'預約探訪 — Nook Cat Care',
     sending:'傳送緊……',
@@ -534,7 +538,7 @@ const L={
     slots:['Morning 09:00–12:00','Afternoon 14:00–17:00','Evening 18:00–21:00'],
     twiceSlot:'Morning + evening (09:00–12:00 & 18:00–21:00)',
     picked:'Picked ✓',full:'Full',
-    services:{meet:'Meet & greet (free)',daily:'Daily visit',twice:'Twice daily'},
+    services:{one:'One day pass',daily:'Daily visit',twice:'Twice daily'},
     dateShort:d=>d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}),
     joiner:', ',
     days:n=>`${n} day${n>1?'s':''}`,
@@ -543,7 +547,7 @@ const L={
     free:'Free',
     twiceHint:'"Twice daily" reserves the morning and evening slots together.',
     waGreeting:'Hello Nook Cat Care! I would like to book:',
-    labels:{service:'Service',date:'Date',slot:'Time',days:'Days',total:'Est. total',name:'Name',phone:'Phone',email:'Email',district:'District',cat:'Cat(s)',notes:'Notes'},
+    labels:{service:'Service',date:'Date',slot:'Time',days:'Days',total:'Est. total',name:'Name',phone:'Phone',email:'Email',district:'District',catCount:'Cat count',cat:'Cat name(s)',notes:'Notes'},
     alertMissing:'Please pick at least one day, choose a time for each, and fill in your name, phone, district and cat details.',
     emailSubject:'Booking request — Nook Cat Care',
     sending:'Sending…',
@@ -571,7 +575,7 @@ langButtons.forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.setLang)
    to mark the whole day full.
    Demo mode: leave the URL empty and the calendar shows deterministic
    sample data. */
-const SHEET_CSV_URL='';
+const SHEET_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQJJrS1y_aaLh4mGPGmEuW9JlmWfqPqj9w_LTCRhpe1BPDjBlHxK2l5ecqwp9l6Rd4bYGh4YKD-Fji-/pub?gid=2025377358&single=true&output=csv';
 
 const blocked={}; // 'YYYY-MM-DD' -> [morning,afternoon,evening] open flags
 
@@ -629,12 +633,12 @@ function keyOf(y,m,d){return `${y}-${String(m+1).padStart(2,'0')}-${String(d).pa
 function parseKey(k){const[a,b,c]=k.split('-').map(Number);return new Date(a,b-1,c)}
 function currentService(){return document.querySelector('input[name="service"]:checked').value}
 
-/* Pricing: HK$200/visit for a single day, HK$180/visit for 2+ days,
-   twice daily HK$360/day, meet & greet free. */
+/* Pricing: one day pass HK$200, daily visit HK$200/visit (HK$180 for 2+ days),
+   twice daily HK$360/day. */
 function priceText(){
   const t=L[lang],n=sel.size,svc=currentService();
   if(!n)return '—';
-  if(svc==='meet')return t.free;
+  if(svc==='one')return `HK$${200*n}（${t.days(n)} × HK$200）`;
   const rate=(svc==='twice')?360:(n>=2?180:200);
   return `HK$${rate*n}（${t.days(n)} × HK$${rate}）`;
 }
@@ -674,7 +678,7 @@ function renderCalendar(){
         const key=keyOf(viewY,viewM,d);
         if(sel.has(key)){sel.delete(key);}
         else{
-          if(currentService()==='meet')sel.clear(); // meet & greet is a single visit
+          if(currentService()==='one')sel.clear(); // one day pass is a single visit
           sel.set(key,null);
         }
         renderCalendar();renderSlots();renderSummary();
@@ -732,10 +736,10 @@ function renderSlots(){
   });
 }
 
-/* Service change: keep the chosen days (trimmed to one for meet & greet,
+/* Service change: keep the chosen days (trimmed to one for the one day pass,
    which is a single visit) but reset times, since slot rules differ. */
 document.getElementById('service-picker').addEventListener('change',()=>{
-  if(currentService()==='meet'&&sel.size>1){
+  if(currentService()==='one'&&sel.size>1){
     const first=[...sel.keys()].sort()[0];
     sel.clear();sel.set(first,null);
   }
@@ -785,7 +789,7 @@ function buildMessage(){
   const t=L[lang];
   const f=id=>document.getElementById(id).value.trim();
   const keys=[...sel.keys()].sort();
-  const required=['f-name','f-phone','f-district','f-cat'];
+  const required=['f-name','f-phone','f-district','f-cat-count','f-cat'];
   if(!keys.length||keys.some(k=>sel.get(k)===null)||required.some(id=>!document.getElementById(id).value.trim())){
     alert(t.alertMissing);return null;
   }
@@ -798,6 +802,7 @@ function buildMessage(){
     `${t.labels.name}: ${f('f-name')}`,
     `${t.labels.phone}: ${f('f-phone')}`,
     `${t.labels.district}: ${f('f-district')}`,
+    `${t.labels.catCount}: ${f('f-cat-count')}`,
     `${t.labels.cat}: ${f('f-cat')}`
   ];
   const email=f('f-email');
