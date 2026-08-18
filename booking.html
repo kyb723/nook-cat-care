@@ -101,11 +101,14 @@ h3{font-size:1.1rem;letter-spacing:0}
 }
 .site-header .wrap{display:flex;align-items:center;gap:clamp(.8rem,2vw,1.4rem);height:78px}
 .site-header .brand{margin-right:auto}
-.brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;color:var(--ink)}
-.brand svg{display:block}
-.brand-word{font-weight:800;font-size:1.28rem;line-height:1.05;letter-spacing:-.01em}
-.brand-word .nook{color:var(--biscuit);display:block;font-size:1.32em}
-.brand-word .cat-care{font-size:.68em;letter-spacing:.09em;text-transform:uppercase}
+.brand{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--ink)}
+.brand img{display:block}
+.brand-icon{height:50px;width:auto}
+.brand-wordmark{height:38px;width:auto}
+@media (max-width:520px){
+  .brand-icon{height:40px}
+  .brand-wordmark{height:30px}
+}
 .back-link{font-weight:700;font-size:.95rem;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:.4em}
 .back-link:hover{text-decoration:underline;text-decoration-color:var(--biscuit);text-decoration-thickness:2px}
 
@@ -290,9 +293,20 @@ h3{font-size:1.1rem;letter-spacing:0}
   padding:2rem 0;
 }
 .site-footer .wrap{
-  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.8rem;
+  /* 1fr auto 1fr keeps the middle link on the true centre line — under the logo —
+     no matter how wide the copyright and tagline are in each language */
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.8rem;
   font-size:.88rem;font-weight:700;color:var(--ink-60);
 }
+.site-footer .wrap>:last-child{text-align:right}
+.wrap-logo{max-width:var(--wrap);margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.footer-logo-link,.footer-logo-link:hover{display:block;text-decoration:none;margin-bottom:1.8rem}
+.footer-logo{display:block;height:132px;width:auto;margin-inline:auto}
+@media (max-width:700px){
+  .site-footer .wrap{grid-template-columns:1fr;justify-items:center;text-align:center;gap:.6rem}
+  .site-footer .wrap>:last-child{text-align:center}
+}
+@media (max-width:520px){.footer-logo{height:108px}}
 .site-footer a{color:var(--ink);text-decoration:none;font-weight:700}
 .site-footer a:hover{text-decoration:underline;text-decoration-color:var(--biscuit);text-decoration-thickness:2px}
 .site-footer .heart{color:var(--heart-red)}
@@ -304,19 +318,8 @@ h3{font-size:1.1rem;letter-spacing:0}
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="index.html" aria-label="Nook Cat Care">
-      <svg width="52" height="52" viewBox="0 0 64 64" aria-hidden="true">
-        <path d="M12 27 L32 11 L52 27 M15 27 V50 Q15 52 17 52 H47 Q49 52 49 50 V27" fill="none" stroke="#282818" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M32 8.5 C30.7 6.6 28 6.9 27.6 8.9 C27.3 10.4 29.5 12.2 32 13.8 C34.5 12.2 36.7 10.4 36.4 8.9 C36 6.9 33.3 6.6 32 8.5 Z" fill="#C81818"/>
-        <path d="M9 52 h8 l-1-7 h-6 Z" fill="#786828"/>
-        <path d="M13 45 C13 41 10.5 39.5 8.5 38.5 M13 45 C13 40 15 37.5 17.5 36.2 M13 45 V43" fill="none" stroke="#088838" stroke-width="2.4" stroke-linecap="round"/>
-        <path d="M50 28 V36" stroke="#282818" stroke-width="1.8" stroke-linecap="round"/>
-        <circle cx="50" cy="39.5" r="3.6" fill="#F8C808"/>
-        <path d="M23.5 52 V40 C23.5 34 27 31.5 32 31.5 C37 31.5 40.5 34 40.5 40 V52 Z" fill="#282818"/>
-        <path d="M25.5 34.5 L24 29.5 L28.5 32 M38.5 34.5 L40 29.5 L35.5 32" fill="#282818" stroke="#282818" stroke-width="2" stroke-linejoin="round"/>
-        <circle cx="28.6" cy="40" r="2" fill="#F8F8F5"/><circle cx="35.4" cy="40" r="2" fill="#F8F8F5"/>
-        <circle cx="28.9" cy="40.3" r=".9" fill="#282818"/><circle cx="35.1" cy="40.3" r=".9" fill="#282818"/>
-      </svg>
-      <span class="brand-word"><span class="nook">Nook</span><span class="cat-care">Cat Care</span></span>
+      <img class="brand-icon" src="assets/logo/logo-icon.png" alt="" width="1080" height="690" aria-hidden="true">
+      <img class="brand-wordmark" src="assets/logo/logo-wordmark.png" alt="Nook Cat Care" width="800" height="360">
     </a>
 
     <div class="lang-toggle" role="group" aria-label="Language / 語言">
@@ -492,6 +495,11 @@ h3{font-size:1.1rem;letter-spacing:0}
 
 <!-- ================= Footer ================= -->
 <footer class="site-footer">
+  <div class="wrap-logo">
+    <a class="footer-logo-link" href="index.html" aria-label="Nook Cat Care">
+      <img class="footer-logo" src="assets/logo/nook-logo.png" alt="Nook Cat Care" width="1080" height="1205">
+    </a>
+  </div>
   <div class="wrap">
     <span>© <span id="year">2026</span> Nook Cat Care · <span data-lang="tc">香港</span><span data-lang="en">Hong Kong</span></span>
     <span><a href="index.html"><span data-lang="tc">返回主頁</span><span data-lang="en">Back to home</span></a></span>
