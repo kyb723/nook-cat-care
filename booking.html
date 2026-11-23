@@ -206,10 +206,6 @@ h3{font-size:1.1rem;letter-spacing:0}
   content:"";position:absolute;bottom:6px;left:50%;transform:translateX(-50%);
   width:5px;height:5px;border-radius:50%;background:var(--biscuit);
 }
-.cal-day.is-limited::before{
-  content:"";position:absolute;top:6px;right:7px;
-  width:7px;height:7px;border-radius:50%;background:var(--toy-yellow);border:1px solid var(--ink);
-}
 .cal-day.is-full{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:var(--ink-35)}
 .cal-day.is-selected{
   background:var(--ink);color:var(--cream);border-color:var(--ink);
@@ -224,28 +220,7 @@ h3{font-size:1.1rem;letter-spacing:0}
 .cal-legend span{display:inline-flex;align-items:center;gap:.45em}
 .dot{width:10px;height:10px;border-radius:50%;flex:none;border:1.5px solid var(--ink)}
 .dot-free{background:var(--paper)}
-.dot-limited{background:var(--toy-yellow)}
 .dot-full{background:var(--ink-35);border-color:var(--ink-35)}
-
-/* ============ Slots ============ */
-.slot-date{font-weight:800;margin-bottom:.9rem;font-size:1rem;color:var(--olive)}
-.slot-list+.slot-date{margin-top:1.4rem;padding-top:1.2rem;border-top:2px dashed var(--line)}
-.slot-list{display:grid;gap:.7rem}
-.slot{
-  display:flex;align-items:center;justify-content:space-between;gap:1rem;
-  border:2px solid var(--line);border-radius:14px;
-  padding:.85rem 1.1rem;background:var(--cream);
-  font-family:var(--font-stack);font-size:.97rem;font-weight:700;color:var(--ink);
-  cursor:pointer;text-align:left;width:100%;
-  transition:border-color .15s,background-color .15s;
-}
-.slot:hover:not(:disabled){border-color:var(--ink)}
-.slot:disabled{opacity:.4;cursor:not-allowed;text-decoration:line-through}
-.slot.is-selected{border-color:var(--ink);background:var(--paper)}
-.slot .t{color:var(--ink-60);font-size:.88rem;white-space:nowrap}
-.slot.is-selected .pick{color:var(--leaf);font-weight:800}
-.slot .pick{color:transparent}
-.slots-placeholder{font-size:.95rem;color:var(--ink-60);border:2px dashed var(--line);border-radius:14px;padding:1.4rem;text-align:center}
 
 /* ============ Form ============ */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
@@ -342,13 +317,13 @@ h3{font-size:1.1rem;letter-spacing:0}
     </p>
     <h1><span data-lang="tc">揀個日子，我哋上門。</span><span data-lang="en">Pick a day, we'll come to them.</span></h1>
     <p class="lede">
-      <span data-lang="tc">日曆顯示我哋而家嘅可預約情況。揀好日期時段、留低資料，我哋會喺一日之內覆實你——時間喺我哋回覆之後先算正式確認。</span>
-      <span data-lang="en">The calendar shows our current availability. Choose a date and time, leave your details, and we'll confirm within one day — a slot is only final once we've replied.</span>
+      <span data-lang="tc">揀好想探訪嘅日期、留低資料，再送出查詢。我哋會喺一日之內回覆，並在確認預約時安排探訪時間。</span>
+      <span data-lang="en">Choose your requested dates, leave your details and send an enquiry. We'll reply within one day and arrange visit times when we confirm your booking.</span>
     </p>
 
     <div class="steps-chips" aria-hidden="true">
       <span class="chip active" id="chip-1"><span class="n"><span>1</span></span> <span data-lang="tc">揀服務</span><span data-lang="en">Choose service</span></span>
-      <span class="chip" id="chip-2"><span class="n"><span>2</span></span> <span data-lang="tc">揀日期同時段</span><span data-lang="en">Pick date &amp; time</span></span>
+      <span class="chip" id="chip-2"><span class="n"><span>2</span></span> <span data-lang="tc">揀日期</span><span data-lang="en">Pick dates</span></span>
       <span class="chip" id="chip-3"><span class="n"><span>3</span></span> <span data-lang="tc">留低資料</span><span data-lang="en">Your details</span></span>
     </div>
   </div>
@@ -363,28 +338,28 @@ h3{font-size:1.1rem;letter-spacing:0}
       <h2><span class="step-n">1</span> <span data-lang="tc">揀服務</span><span data-lang="en">Choose a service</span></h2>
       <p class="hint">
         <span data-lang="tc">第一次幫襯？由一日探訪開始——貓咪可先認識我哋。</span>
-        <span data-lang="en">First time with us? Start with the One day pass — your cat meets us before any real visits happen.</span>
+        <span data-lang="en">First time with us? Start with a single home visit so your cat can get to know us.</span>
       </p>
       <div class="service-picker" id="service-picker">
         <div class="service-option">
           <input type="radio" name="service" id="svc-one" value="one" checked>
           <label for="svc-one">
-            <span class="s-name"><span><span data-lang="tc">一日探訪</span><span data-lang="en">One day pass</span></span> <span class="s-price">HK$200<span data-lang="tc">/次</span><span data-lang="en">/visit</span></span></span>
+            <span class="s-name"><span><span data-lang="tc">一日探訪</span><span data-lang="en">One day pass</span></span> <span class="s-price"><span data-price="single"></span><span data-lang="tc">/次</span><span data-lang="en">/visit</span></span></span>
             <span class="s-desc"><span data-lang="tc">30-45 分鐘探訪，認識你隻貓</span><span data-lang="en">30-45 minutes visit to meet your cat</span></span>
           </label>
         </div>
         <div class="service-option">
           <input type="radio" name="service" id="svc-daily" value="daily">
           <label for="svc-daily">
-            <span class="s-name"><span><span data-lang="tc">每日探訪</span><span data-lang="en">Daily visit</span></span> <span class="s-price">HK$180<span data-lang="tc">/次</span><span data-lang="en">/visit</span></span></span>
-            <span class="s-desc"><span data-lang="tc">每日 30-45 分鐘 · 兩日或以上每次 HK$180</span><span data-lang="en">One 30-45 min visit a day · HK$180/visit for 2+ days</span></span>
+            <span class="s-name"><span><span data-lang="tc">每日探訪</span><span data-lang="en">Daily visit</span></span> <span class="s-price"><span data-price="dailyMultiple"></span><span data-lang="tc">/次</span><span data-lang="en">/visit</span></span></span>
+            <span class="s-desc"><span data-lang="tc">每日 30-45 分鐘 · 兩日或以上每次 <span data-price="dailyMultiple"></span></span><span data-lang="en">One 30-45 min visit a day · <span data-price="dailyMultiple"></span>/visit for 2+ days</span></span>
           </label>
         </div>
         <div class="service-option">
           <input type="radio" name="service" id="svc-twice" value="twice">
           <label for="svc-twice">
-            <span class="s-name"><span><span data-lang="tc">每日兩次</span><span data-lang="en">Twice daily</span></span> <span class="s-price">HK$360<span data-lang="tc">/日</span><span data-lang="en">/day</span></span></span>
-            <span class="s-desc"><span data-lang="tc">朝早同夜晚各一次</span><span data-lang="en">Morning and evening visits</span></span>
+            <span class="s-name"><span><span data-lang="tc">每日兩次</span><span data-lang="en">Twice daily</span></span> <span class="s-price"><span data-price="twiceDaily"></span><span data-lang="tc">/日</span><span data-lang="en">/day</span></span></span>
+            <span class="s-desc"><span data-lang="tc">每日兩次上門探訪</span><span data-lang="en">Two home visits per day</span></span>
           </label>
         </div>
       </div>
@@ -405,29 +380,22 @@ h3{font-size:1.1rem;letter-spacing:0}
             <button type="button" id="cal-next" aria-label="下一個月 / Next month">→</button>
           </span>
         </div>
-        <div class="cal-grid" id="cal-grid" role="grid"></div>
+        <p class="hint" id="availability-status" role="status"></p>
+        <div class="cal-grid" id="cal-grid"></div>
         <div class="cal-legend">
           <span><span class="dot dot-free"></span> <span data-lang="tc">有位</span><span data-lang="en">Available</span></span>
-          <span><span class="dot dot-limited"></span> <span data-lang="tc">剩少量時段</span><span data-lang="en">Few slots left</span></span>
           <span><span class="dot dot-full"></span> <span data-lang="tc">已滿</span><span data-lang="en">Fully booked</span></span>
         </div>
       </div>
 
-      <!-- Step 2b: slots + Step 3: details -->
+      <!-- Step 3: details -->
       <div>
         <div class="card">
-          <h2><span data-lang="tc">揀時段</span><span data-lang="en">Pick a time</span></h2>
-          <div id="slot-area">
-            <p class="slots-placeholder">
-              <span data-lang="tc">先喺日曆度揀一日 🐾</span>
-              <span data-lang="en">Choose a day on the calendar first 🐾</span>
-            </p>
-          </div>
-        </div>
-
-        <div class="card">
           <h2><span class="step-n">3</span> <span data-lang="tc">留低資料</span><span data-lang="en">Your details</span></h2>
-          <form id="booking-form" novalidate>
+          <p class="hint"><span data-lang="tc">主要服務地區：將軍澳、沙田、火炭及大埔。</span><span data-lang="en">Primary service areas: Tseung Kwan O, Sha Tin, Fo Tan and Tai Po.</span>
+      <span data-lang="tc">港島地區每次探訪另收 <span data-price="islandPerVisit"></span> 交通費。</span><span data-lang="en">Hong Kong Island: <span data-price="islandPerVisit"></span> transport surcharge per visit.</span>
+      <span data-lang="tc">其他地區歡迎 <a data-contact="whatsapp">WhatsApp 查詢</a>，服務安排及交通費需另行確認。</span><span data-lang="en">For other areas, <a data-contact="whatsapp">enquire on WhatsApp</a> to confirm availability and any transport surcharge.</span></p>
+          <form id="booking-form">
             <div class="form-grid">
               <div class="field">
                 <label for="f-name"><span data-lang="tc">你嘅名字</span><span data-lang="en">Your name</span></label>
@@ -442,8 +410,12 @@ h3{font-size:1.1rem;letter-spacing:0}
                 <input id="f-email" name="email" type="email" autocomplete="email">
               </div>
               <div class="field">
-                <label for="f-district"><span data-lang="tc">地區</span><span data-lang="en">District</span></label>
-                <input id="f-district" name="district" type="text" placeholder="" required>
+                <label for="f-area"><span data-lang="tc">地區</span><span data-lang="en">District</span></label>
+                <select id="f-area" name="area" required></select>
+              </div>
+              <div class="field">
+                <label for="f-district"><span data-lang="tc">詳細地區（可選填）</span><span data-lang="en">District details (optional)</span></label>
+                <input id="f-district" name="district" type="text">
               </div>
               <div class="field">
                 <label for="f-cat-count"><span data-lang="tc">貓咪數目</span><span data-lang="en">Cat count</span></label>
@@ -455,7 +427,8 @@ h3{font-size:1.1rem;letter-spacing:0}
               </div>
               <div class="field full">
                 <label for="f-notes"><span data-lang="tc">備註 <span class="opt">（可以唔填）</span></span><span data-lang="en">Notes <span class="opt">(optional)</span></span></label>
-                <textarea id="f-notes" name="notes" placeholder=""></textarea>
+                <textarea id="f-notes" name="notes" aria-describedby="preferred-time"></textarea>
+                <p class="hint" id="preferred-time"><span data-lang="tc">如有希望到訪的時間，歡迎在備註填寫，我們會盡量配合。實際探訪時間將於確認預約時安排。</span><span data-lang="en">If you have a preferred visit time, please include it in the notes. We'll do our best to accommodate your request. The actual visit time will be arranged when your booking is confirmed.</span></p>
               </div>
             </div>
           </form>
@@ -464,16 +437,16 @@ h3{font-size:1.1rem;letter-spacing:0}
         <!-- Summary, styled like a Nook note -->
         <div class="summary-note">
           <span class="tape" aria-hidden="true"></span>
-          <h3><span data-lang="tc">你嘅預約</span><span data-lang="en">Your booking</span></h3>
+          <h3><span data-lang="tc">你嘅預約查詢</span><span data-lang="en">Your enquiry</span></h3>
           <dl class="summary-rows">
             <div><dt><span data-lang="tc">服務</span><span data-lang="en">Service</span></dt><dd id="sum-service">—</dd></div>
             <div><dt><span data-lang="tc">日期</span><span data-lang="en">Days</span></dt><dd id="sum-date">—</dd></div>
-            <div><dt><span data-lang="tc">時段</span><span data-lang="en">Time</span></dt><dd id="sum-slot">—</dd></div>
+            <div><dt><span data-lang="tc">交通費</span><span data-lang="en">Transport</span></dt><dd id="sum-transport">—</dd></div>
             <div><dt><span data-lang="tc">預計費用</span><span data-lang="en">Est. total</span></dt><dd id="sum-total">—</dd></div>
           </dl>
           <div class="summary-actions">
             <button type="button" class="btn btn-primary" id="submit-wa" disabled>
-              <span data-lang="tc">經 WhatsApp 送出預約</span><span data-lang="en">Send booking via WhatsApp</span>
+              <span data-lang="tc">經 WhatsApp 查詢</span><span data-lang="en">Enquire via WhatsApp</span>
             </button>
             <button type="button" class="btn btn-ghost" id="submit-email" disabled>
               <span data-lang="tc">或者用 Email 送出</span><span data-lang="en">Or send by email</span>
@@ -481,8 +454,8 @@ h3{font-size:1.1rem;letter-spacing:0}
           </div>
           <p class="confirm-hint" id="send-status" hidden aria-live="polite"></p>
           <p class="confirm-hint">
-            <span data-lang="tc">我哋會喺一日之內覆實你 <span class="heart">♥</span> 時段以我哋回覆為準。</span>
-            <span data-lang="en">We'll confirm within one day <span class="heart">♥</span> Your slot is final once we reply.</span>
+            <span data-lang="tc">我哋會喺一日之內回覆。收到確認後，預約先正式成立。</span>
+            <span data-lang="en">We'll reply within one day. Your booking is final once we confirm it.</span>
           </p>
         </div>
       </div>
@@ -503,10 +476,12 @@ h3{font-size:1.1rem;letter-spacing:0}
   <div class="wrap">
     <span>© <span id="year">2026</span> Nook Cat Care · <span data-lang="tc">香港</span><span data-lang="en">Hong Kong</span></span>
     <span><a href="index.html"><span data-lang="tc">返回主頁</span><span data-lang="en">Back to home</span></a></span>
+    <span><a data-contact="whatsapp">WhatsApp</a> · <a data-contact="tel" data-contact-phone></a></span>
     <span>Care that feels like home. <span class="heart">♥</span></span>
   </div>
 </footer>
 
+<script src="site-config.js"></script>
 <script>
 /* ================= Language ================= */
 const TITLES={
@@ -519,23 +494,14 @@ const L={
     calTitle:(y,m)=>`${y}年${m+1}月`,
     dows:['一','二','三','四','五','六','日'],
     dateFmt:d=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${'日一二三四五六'[d.getDay()]}）`,
-    slots:['朝早 09:00–12:00','下晝 14:00–17:00','夜晚 18:00–21:00'],
-    twiceSlot:'朝早＋夜晚（09:00–12:00 同 18:00–21:00）',
-    picked:'已揀 ✓',full:'已滿',
     services:{one:'一日探訪',daily:'每日探訪',twice:'每日兩次'},
-    dateShort:d=>`${d.getMonth()+1}月${d.getDate()}日`,
     joiner:'、',
     days:n=>`${n} 日`,
-    chosenSuffix:'日已揀時段',
-    perDay:'逐日唔同（詳情喺訊息入面）',
-    free:'免費',
-    twiceHint:'「每日兩次」會同時預留朝早同夜晚時段。',
-    waGreeting:'你好 Nook Cat Care！我想預約：',
-    labels:{service:'服務',date:'日期',slot:'時段',days:'日數',total:'預計費用',name:'名字',phone:'電話',email:'Email',district:'地區',catCount:'貓咪數目',cat:'貓咪名字',notes:'備註'},
-    alertMissing:'請至少揀一日，幫每一日揀好時段，並填妥名字、電話、地區同貓咪資料。',
+    waGreeting:'你好 Nook Cat Care！我想查詢預約：',
+    labels:{service:'服務',date:'日期',days:'日數',total:'預計費用',name:'名字',phone:'電話',email:'Email',district:'地區',catCount:'貓咪數目',cat:'貓咪名字',notes:'備註'},
     emailSubject:'預約探訪 — Nook Cat Care',
     sending:'傳送緊……',
-    sent:'已送出！我哋會喺一日之內覆實你 ♥',
+    sent:'查詢已送出，我哋會喺一日之內回覆。',
     sendFail:'唔好意思，送唔到。請再試一次，或者直接 WhatsApp 我哋。'
   },
   en:{
@@ -543,23 +509,14 @@ const L={
     calTitle:(y,m)=>`${L.en.months[m]} ${y}`,
     dows:['Mo','Tu','We','Th','Fr','Sa','Su'],
     dateFmt:d=>d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'}),
-    slots:['Morning 09:00–12:00','Afternoon 14:00–17:00','Evening 18:00–21:00'],
-    twiceSlot:'Morning + evening (09:00–12:00 & 18:00–21:00)',
-    picked:'Picked ✓',full:'Full',
     services:{one:'One day pass',daily:'Daily visit',twice:'Twice daily'},
-    dateShort:d=>d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}),
     joiner:', ',
     days:n=>`${n} day${n>1?'s':''}`,
-    chosenSuffix:'days have a time',
-    perDay:'Varies per day (details in the message)',
-    free:'Free',
-    twiceHint:'"Twice daily" reserves the morning and evening slots together.',
-    waGreeting:'Hello Nook Cat Care! I would like to book:',
-    labels:{service:'Service',date:'Date',slot:'Time',days:'Days',total:'Est. total',name:'Name',phone:'Phone',email:'Email',district:'District',catCount:'Cat count',cat:'Cat name(s)',notes:'Notes'},
-    alertMissing:'Please pick at least one day, choose a time for each, and fill in your name, phone, district and cat details.',
+    waGreeting:'Hello Nook Cat Care! I would like to enquire about a booking:',
+    labels:{service:'Service',date:'Date',days:'Days',total:'Est. total',name:'Name',phone:'Phone',email:'Email',district:'District',catCount:'Cat count',cat:'Cat name(s)',notes:'Notes'},
     emailSubject:'Booking request — Nook Cat Care',
     sending:'Sending…',
-    sent:'Sent! We\'ll confirm within one day ♥',
+    sent:'Enquiry sent. We\'ll reply within one day.',
     sendFail:'Sorry, that didn\'t send. Please try again, or message us on WhatsApp.'
   }
 };
@@ -571,7 +528,7 @@ function setLang(l){
   document.title=TITLES[l];
   langButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.setLang===l)));
   try{localStorage.setItem('nook-lang',l)}catch(e){}
-  renderCalendar();renderSlots();renderSummary();
+  renderAreaOptions();renderCalendar();renderSummary();
 }
 langButtons.forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.setLang)));
 
@@ -580,78 +537,53 @@ langButtons.forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.setLang)
    Sheet columns: date (YYYY-MM-DD), morning, afternoon, evening.
    Every day defaults to OPEN — add a row only to block slots, putting
    any value (e.g. "x") in the slot column to block it. Fill all three
-   to mark the whole day full.
-   Demo mode: leave the URL empty and the calendar shows deterministic
-   sample data. */
+   to mark the whole day full. The calendar is disabled until this feed loads. */
 const SHEET_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQJJrS1y_aaLh4mGPGmEuW9JlmWfqPqj9w_LTCRhpe1BPDjBlHxK2l5ecqwp9l6Rd4bYGh4YKD-Fji-/pub?gid=2025377358&single=true&output=csv';
 
-const blocked={}; // 'YYYY-MM-DD' -> [morning,afternoon,evening] open flags
+const hkDate = new Intl.DateTimeFormat('en-CA', {
+  timeZone:'Asia/Hong_Kong', year:'numeric', month:'2-digit', day:'2-digit'
+});
+const todayKey = hkDate.format(new Date());
+function keyOf(y,m,d){return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;}
+function parseKey(key){
+  const [y,m,d]=key.split('-').map(Number);
+  return new Date(y,m-1,d,12);
+}
+const today=parseKey(todayKey);
+const maxDate=new Date(today.getFullYear(),today.getMonth()+2,0);
+let viewY=today.getFullYear(),viewM=today.getMonth();
+const selected=new Set();
+const availability=new Map();
+let availabilityState='loading';
 
 async function loadAvailability(){
-  if(!SHEET_CSV_URL)return;
   try{
-    const res=await fetch(SHEET_CSV_URL,{cache:'no-store'});
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    const text=await res.text();
-    text.trim().split(/\r?\n/).slice(1).forEach(line=>{
-      const cols=line.split(',').map(s=>s.replace(/^"|"$/g,'').trim());
-      const [date,am,pm,eve]=cols;
-      if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return;
-      blocked[date]=[!am,!pm,!eve]; // non-empty cell = blocked
-    });
-  }catch(e){
-    // If the sheet is unreachable, leave everything open — bookings are
-    // confirmed by reply anyway, so an optimistic calendar is safe.
-    console.warn('Availability sheet failed to load; showing all slots open.',e);
+    const res=await fetch(SHEET_CSV_URL,{cache:'no-store',signal:AbortSignal.timeout(10000)});
+    if(!res.ok)throw new Error('Availability HTTP '+res.status);
+    const [header,...rows]=(await res.text()).trim().split(/\r?\n/);
+    const cells=row=>row.split(',').map(cell=>cell.trim().replace(/^"|"$/g,''));
+    if(cells(header).join(',')!=='date,morning,afternoon,evening')throw new Error('Unexpected availability header');
+    for(const row of rows){
+      const [date,am,pm,eve]=cells(row);
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(date))continue;
+      availability.set(date,[!am,!pm,!eve]);
+    }
+    availabilityState='ready';
+  }catch(error){
+    availabilityState='error';
+    console.warn('Availability could not be loaded.',error);
   }
-  renderCalendar();renderSlots();renderSummary();
+  renderCalendar();renderSummary();
 }
 
-function dayHash(y,m,d){
-  let h=(y*373+ (m+1)*2777 + d*7919)>>>0;
-  h^=h<<13;h>>>=0;h^=h>>7;h^=h<<17;h>>>=0;
-  return h;
-}
-const today=new Date();today.setHours(0,0,0,0);
-const maxDate=new Date(today.getFullYear(),today.getMonth()+2,0); // end of month, 2 months out
-
-function dayInfo(y,m,d){
-  const date=new Date(y,m,d);
-  if(date<today||date>maxDate)return{state:'past',slots:[false,false,false]};
-  let slots;
-  if(SHEET_CSV_URL){
-    const key=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    slots=blocked[key]?blocked[key].slice():[true,true,true];
-  }else{
-    const h=dayHash(y,m,d);
-    if(h%9===0)return{state:'full',slots:[false,false,false]};
-    slots=[ (h>>3)%5!==0, (h>>6)%4!==0, (h>>9)%5!==0 ];
-  }
-  if(!slots.some(Boolean))return{state:'full',slots};
-  const open=slots.filter(Boolean).length;
-  return{state:open===1?'limited':'free',slots};
+function currentService(){return document.querySelector('input[name="service"]:checked').value;}
+function isAvailable(key){
+  if(availabilityState!=='ready'||key<todayKey||key>keyOf(maxDate.getFullYear(),maxDate.getMonth(),maxDate.getDate()))return false;
+  const windows=availability.get(key)??[true,true,true];
+  // Preserve the morning + evening capacity rule for two visits.
+  return currentService()==='twice'?windows[0]&&windows[2]:windows.some(Boolean);
 }
 
-/* ================= State ================= */
-let viewY=today.getFullYear(),viewM=today.getMonth();
-// Selected days: 'YYYY-MM-DD' -> chosen slot (0/1/2, 'twice', or null while unpicked)
-const sel=new Map();
-
-function keyOf(y,m,d){return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`}
-function parseKey(k){const[a,b,c]=k.split('-').map(Number);return new Date(a,b-1,c)}
-function currentService(){return document.querySelector('input[name="service"]:checked').value}
-
-/* Pricing: one day pass HK$200, daily visit HK$200/visit (HK$180 for 2+ days),
-   twice daily HK$360/day. */
-function priceText(){
-  const t=L[lang],n=sel.size,svc=currentService();
-  if(!n)return '—';
-  if(svc==='one')return `HK$${200*n}（${t.days(n)} × HK$200）`;
-  const rate=(svc==='twice')?360:(n>=2?180:200);
-  return `HK$${rate*n}（${t.days(n)} × HK$${rate}）`;
-}
-
-/* ================= Calendar ================= */
 const calGrid=document.getElementById('cal-grid');
 const calTitle=document.getElementById('cal-title');
 const btnPrev=document.getElementById('cal-prev');
@@ -660,6 +592,11 @@ const btnNext=document.getElementById('cal-next');
 function renderCalendar(){
   const t=L[lang];
   calTitle.textContent=t.calTitle(viewY,viewM);
+  document.getElementById('availability-status').textContent={
+    loading:lang==='tc'?'正在載入可預約日期……':'Loading availability…',
+    error:lang==='tc'?'暫時未能載入可預約日期，請重新整理頁面，或使用下方嘅 WhatsApp 聯絡連結。':'Availability could not be loaded. Refresh the page or use the WhatsApp contact link below.',
+    ready:''
+  }[availabilityState];
   calGrid.innerHTML='';
   t.dows.forEach(d=>{
     const el=document.createElement('span');
@@ -673,26 +610,26 @@ function renderCalendar(){
   }
   const days=new Date(viewY,viewM+1,0).getDate();
   for(let d=1;d<=days;d++){
-    const info=dayInfo(viewY,viewM,d);
+    const key=keyOf(viewY,viewM,d);
     const el=document.createElement('button');
     el.type='button';el.className='cal-day';el.textContent=d;
     const isToday=(viewY===today.getFullYear()&&viewM===today.getMonth()&&d===today.getDate());
     if(isToday)el.classList.add('is-today');
-    if(info.state==='past'){el.disabled=true;}
-    else if(info.state==='full'){el.disabled=true;el.classList.add('is-full');}
-    else{
-      if(info.state==='limited')el.classList.add('is-limited');
-      el.addEventListener('click',()=>{
-        const key=keyOf(viewY,viewM,d);
-        if(sel.has(key)){sel.delete(key);}
-        else{
-          if(currentService()==='one')sel.clear(); // one day pass is a single visit
-          sel.set(key,null);
-        }
-        renderCalendar();renderSlots();renderSummary();
-      });
-    }
-    if(sel.has(keyOf(viewY,viewM,d)))el.classList.add('is-selected');
+    el.disabled=!isAvailable(key);
+    if(el.disabled&&availabilityState==='ready'&&key>=todayKey)el.classList.add('is-full');
+    el.dataset.date=key;
+    el.setAttribute('aria-label',t.dateFmt(parseKey(key)));
+    el.setAttribute('aria-pressed',String(selected.has(key)));
+    if(selected.has(key))el.classList.add('is-selected');
+    el.addEventListener('click',()=>{
+      if(selected.has(key))selected.delete(key);
+      else{
+        if(currentService()==='one')selected.clear();
+        selected.add(key);
+      }
+      renderCalendar();renderSummary();
+      calGrid.querySelector(`[data-date="${key}"]`).focus();
+    });
     calGrid.appendChild(el);
   }
   btnPrev.disabled=(viewY===today.getFullYear()&&viewM===today.getMonth());
@@ -701,127 +638,111 @@ function renderCalendar(){
 btnPrev.addEventListener('click',()=>{viewM--;if(viewM<0){viewM=11;viewY--;}renderCalendar();});
 btnNext.addEventListener('click',()=>{viewM++;if(viewM>11){viewM=0;viewY++;}renderCalendar();});
 
-/* ================= Slots ================= */
-const slotArea=document.getElementById('slot-area');
-
-function renderSlots(){
-  const t=L[lang];
-  const keys=[...sel.keys()].sort();
-  if(!keys.length){
-    slotArea.innerHTML=`<p class="slots-placeholder">${lang==='tc'?'先喺日曆度揀返啲日子 🐾':'Choose your days on the calendar first 🐾'}</p>`;
-    return;
-  }
-  const svc=currentService();
-  let html='';
-  keys.forEach(k=>{
-    const dte=parseKey(k);
-    const info=dayInfo(dte.getFullYear(),dte.getMonth(),dte.getDate());
-    const chosen=sel.get(k);
-    html+=`<p class="slot-date">${t.dateFmt(dte)}</p><div class="slot-list">`;
-    if(svc==='twice'){
-      const ok=info.slots[0]&&info.slots[2];
-      const isSel=chosen==='twice';
-      html+=`<button type="button" class="slot ${isSel?'is-selected':''}" data-date="${k}" data-slot="twice" ${ok?'':'disabled'}>
-        <span>${t.twiceSlot}</span><span class="${isSel?'pick':'t'}">${isSel?t.picked:(ok?'':t.full)}</span></button>`;
-    }else{
-      t.slots.forEach((label,i)=>{
-        const ok=info.slots[i];
-        const isSel=chosen===i;
-        html+=`<button type="button" class="slot ${isSel?'is-selected':''}" data-date="${k}" data-slot="${i}" ${ok?'':'disabled'}>
-          <span>${label}</span><span class="${isSel?'pick':'t'}">${isSel?t.picked:(ok?'':t.full)}</span></button>`;
-      });
-    }
-    html+='</div>';
-  });
-  if(svc==='twice')html+=`<p class="hint" style="margin:.9rem 0 0">${t.twiceHint}</p>`;
-  slotArea.innerHTML=html;
-  slotArea.querySelectorAll('.slot:not(:disabled)').forEach(b=>{
-    b.addEventListener('click',()=>{
-      const v=b.dataset.slot;
-      sel.set(b.dataset.date,v==='twice'?'twice':Number(v));
-      renderSlots();renderSummary();
-    });
-  });
-}
-
-/* Service change: keep the chosen days (trimmed to one for the one day pass,
-   which is a single visit) but reset times, since slot rules differ. */
-document.getElementById('service-picker').addEventListener('change',()=>{
-  if(currentService()==='one'&&sel.size>1){
-    const first=[...sel.keys()].sort()[0];
-    sel.clear();sel.set(first,null);
-  }
-  for(const k of sel.keys())sel.set(k,null);
-  renderCalendar();renderSlots();renderSummary();
-});
-
-/* ================= Summary + progress chips ================= */
+const form=document.getElementById('booking-form');
+const area=document.getElementById('f-area');
 const sumService=document.getElementById('sum-service');
 const sumDate=document.getElementById('sum-date');
-const sumSlot=document.getElementById('sum-slot');
+const sumTransport=document.getElementById('sum-transport');
 const sumTotal=document.getElementById('sum-total');
 const btnWA=document.getElementById('submit-wa');
 const btnEmail=document.getElementById('submit-email');
 
-function slotLabelFor(k){
-  const t=L[lang],v=sel.get(k);
-  if(v===null)return null;
-  return v==='twice'?t.twiceSlot:t.slots[v];
+const districts={
+  '': ['請選擇地區','Choose your district or area'],
+  tko: ['將軍澳','Tseung Kwan O'],
+  shatin: ['沙田','Sha Tin'],
+  fotan: ['火炭','Fo Tan'],
+  taipo: ['大埔','Tai Po'],
+  island: ['港島','Hong Kong Island'],
+  other: ['其他地區','Other area']
+};
+function renderAreaOptions(){
+  const value=area.value;
+  area.replaceChildren(...Object.entries(districts).map(([key,labels])=>new Option(labels[lang==='tc'?0:1],key)));
+  area.value=value;
+}
+function requestedDates(){return [...selected].sort();}
+
+document.getElementById('service-picker').addEventListener('change',()=>{
+  for(const key of selected){
+    if(!isAvailable(key))selected.delete(key);
+  }
+  if(currentService()==='one'){
+    requestedDates().slice(1).forEach(key=>selected.delete(key));
+  }
+  renderCalendar();renderSummary();
+});
+area.addEventListener('change',renderSummary);
+form.addEventListener('submit',event=>event.preventDefault());
+
+function estimate(){
+  const {pricing}=NOOK;
+  const count=selected.size;
+  const service=currentService();
+  const visits=count*(service==='twice'?2:1);
+  const rate=service==='twice'?pricing.twiceDaily:service==='daily'&&count>1?pricing.dailyMultiple:pricing.single;
+  const base=count*rate;
+  const money=amount=>'HK$'+amount;
+  const pending=lang==='tc'?'待確認':'To be confirmed';
+  if(!count)return {transport:'—',total:'—'};
+  if(!area.value||area.value==='other'){
+    const qualifier=lang==='tc'?'另加待確認交通費':'plus transport to be confirmed';
+    return {transport:pending,total:money(base)+' '+qualifier};
+  }
+  const surcharge=area.value==='island'?visits*pricing.islandPerVisit:0;
+  return {
+    transport:money(surcharge)+(surcharge?` (${visits} × ${money(pricing.islandPerVisit)})`:''),
+    total:money(base+surcharge)
+  };
 }
 function renderSummary(){
   const t=L[lang];
-  const keys=[...sel.keys()].sort();
-  const chosen=keys.filter(k=>sel.get(k)!==null);
+  const keys=requestedDates();
+  const {transport,total}=estimate();
   sumService.textContent=t.services[currentService()];
-  sumDate.textContent=keys.length?keys.map(k=>t.dateShort(parseKey(k))).join(t.joiner):'—';
-  let slotTxt='—';
-  if(keys.length){
-    if(chosen.length<keys.length)slotTxt=`${chosen.length}/${keys.length} ${t.chosenSuffix}`;
-    else{
-      const labels=[...new Set(keys.map(slotLabelFor))];
-      slotTxt=labels.length===1?labels[0]:t.perDay;
-    }
-  }
-  sumSlot.textContent=slotTxt;
-  sumTotal.textContent=priceText();
-  const complete=keys.length>0&&chosen.length===keys.length;
-  const ready=complete&&!sent;
+  sumDate.textContent=keys.length?keys.map(k=>t.dateFmt(parseKey(k))).join(t.joiner):'—';
+  sumTransport.textContent=transport;
+  sumTotal.textContent=total;
+  const complete=keys.length>0&&keys.every(isAvailable);
+  const ready=complete&&!sent&&!sending;
   btnWA.disabled=!ready;btnEmail.disabled=!ready;
   document.getElementById('chip-1').className='chip done';
   document.getElementById('chip-2').className='chip '+(complete?'done':'active');
   document.getElementById('chip-3').className='chip '+(complete?'active':'');
 }
 
-/* ================= Submit ================= */
 function buildMessage(){
   const t=L[lang];
-  const f=id=>document.getElementById(id).value.trim();
-  const keys=[...sel.keys()].sort();
-  const required=['f-name','f-phone','f-district','f-cat-count','f-cat'];
-  if(!keys.length||keys.some(k=>sel.get(k)===null)||required.some(id=>!document.getElementById(id).value.trim())){
-    alert(t.alertMissing);return null;
+  const fields=['f-name','f-phone','f-cat-count','f-cat'];
+  for(const id of fields){
+    const field=document.getElementById(id);
+    field.value=field.value.trim();
   }
+  const f=id=>document.getElementById(id).value.trim();
+  const keys=requestedDates();
+  if(!keys.length||!keys.every(isAvailable)||!form.reportValidity())return null;
+  const {transport,total}=estimate();
+  const district=[area.selectedOptions[0].textContent,f('f-district')].filter(Boolean).join(' · ');
   const lines=[
     t.waGreeting,
     `${t.labels.service}: ${t.services[currentService()]}`,
-    ...keys.map(k=>`- ${t.dateFmt(parseKey(k))}: ${slotLabelFor(k)}`),
+    `${t.labels.date}: ${keys.join(t.joiner)}`,
     `${t.labels.days}: ${t.days(keys.length)}`,
-    `${t.labels.total}: ${priceText()}`,
+    `${lang==='tc'?'交通費':'Transport'}: ${transport}`,
+    `${t.labels.total}: ${total}`,
     `${t.labels.name}: ${f('f-name')}`,
     `${t.labels.phone}: ${f('f-phone')}`,
-    `${t.labels.district}: ${f('f-district')}`,
+    `${t.labels.district}: ${district}`,
     `${t.labels.catCount}: ${f('f-cat-count')}`,
     `${t.labels.cat}: ${f('f-cat')}`
   ];
-  const email=f('f-email');
-  if(email)lines.push(`${t.labels.email}: ${email}`);
-  const notes=f('f-notes');
-  if(notes)lines.push(`${t.labels.notes}: ${notes}`);
+  if(f('f-email'))lines.push(`${t.labels.email}: ${f('f-email')}`);
+  if(f('f-notes'))lines.push(`${t.labels.notes}: ${f('f-notes')}`);
   return lines.join('\n');
 }
 btnWA.addEventListener('click',()=>{
   const msg=buildMessage();
-  if(msg)window.open('https://wa.me/85292885723?text='+encodeURIComponent(msg),'_blank','noopener');
+  if(msg)window.open(NOOK.contact.whatsapp+'?text='+encodeURIComponent(msg),'_blank','noopener');
 });
 
 /* Email path: delivered by Web3Forms, so it works even when the
@@ -829,11 +750,12 @@ btnWA.addEventListener('click',()=>{
 const WEB3FORMS_KEY='59567fef-b27e-4597-8b8c-94f7bb2309d0';
 const statusEl=document.getElementById('send-status');
 let sent=false;
+let sending=false;
 btnEmail.addEventListener('click',async()=>{
   const msg=buildMessage();
   if(!msg)return;
   const t=L[lang];
-  btnEmail.disabled=true;btnWA.disabled=true;
+  sending=true;renderSummary();
   statusEl.hidden=false;statusEl.textContent=t.sending;
   try{
     const res=await fetch('https://api.web3forms.com/submit',{
@@ -848,12 +770,13 @@ btnEmail.addEventListener('click',async()=>{
       })
     });
     const data=await res.json();
-    if(!data.success)throw new Error(data.message||'submit failed');
+    if(!res.ok||!data.success)throw new Error(data.message||'submit failed');
     sent=true;
     statusEl.textContent=t.sent;
   }catch(e){
     statusEl.textContent=t.sendFail;
-    btnEmail.disabled=false;btnWA.disabled=false;
+  }finally{
+    sending=false;renderSummary();
   }
 });
 

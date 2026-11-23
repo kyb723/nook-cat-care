@@ -1,0 +1,142 @@
+const {chromium}=require('playwright');
+const assert=require('node:assert/strict');
+const out=process.env.NOOK_SCREENSHOTS;
+if(out)require('node:fs').mkdirSync(out,{recursive:true});
+const origin=process.env.NOOK_TEST_ORIGIN||'http://127.0.0.1:8765';
+(async()=>{
+const browser=await chromium.launch({executablePath:process.env.NOOK_CHROMIUM||'/usr/bin/chromium',args:['--no-sandbox','--disable-dev-shm-usage','--no-proxy-server'],timeout:15000});
+try{
+for(const viewport of [{width:1440,height:1000},{width:390,height:844}]){
+ const mobile=viewport.width<500;
+ const context=await browser.newContext({viewport,timezoneId:'America/Los_Angeles',reducedMotion:'reduce'});
+ const page=await context.newPage();
+ page.setDefaultTimeout(5000);
+ let failSheet=false, failEmail=false;
+ const emails=[];
+ const errors=[], missing=[];
+ page.on('pageerror',error=>errors.push(error.message));
+ page.on('response',res=>{if(res.url().startsWith(origin)&&res.status()>=400)missing.push(res.url())});
+ await page.clock.setFixedTime(new Date('2026-11-23T16:30:00Z'));
+ await page.addInitScript(()=>{window.open=(url)=>{window.draftWhatsApp=url; return null;};});
+ await context.route('**/*',async route=>{
+   const url=route.request().url();
+   if(url.startsWith(origin+'/'))return route.continue();
+   if(url.startsWith('https://docs.google.com/'))return route.fulfill({
+     status:failSheet?503:200,contentType:'text/csv',body:'date,morning,afternoon,evening\n2026-11-25,x,x,x\n2026-11-26,x,,\n'
+   });
+   if(url==='https://api.web3forms.com/submit'){
+     emails.push(route.request().postDataJSON());
+     return route.fulfill({status:failEmail?503:200,json:{success:!failEmail}});
+   }
+   return route.abort();
+ });
+ const text=sel=>page.locator(sel).textContent();
+ const date=day=>page.locator('[data-date="2026-11-'+day+'"]');
+ const choose=day=>date(day).click();
+ const fill=(sel,value)=>page.locator('#f-'+sel).fill(value);
+ const btn=page.locator('#submit-wa');
+ const getMessage=async()=>{
+   await btn.click();
+   const url=new URL(await page.evaluate(()=>window.draftWhatsApp));
+   assert.equal(url.origin+url.pathname,'https://wa.me/85292885723');
+   assert.match(url.href,/%26/);
+   return url.searchParams.get('text');
+ };
+ await page.goto(origin);
+ assert.equal(await page.locator('html').getAttribute('lang'),'zh-Hant');
+ assert.equal(await page.locator('[data-contact=tel]').getAttribute('href'),'tel:+85292885723');
+ assert.equal(await page.locator('[data-contact=instagram]').getAttribute('href'),'https://www.instagram.com/nookcatcare/');
+ assert.equal(await page.locator('img').evaluateAll(imgs=>imgs.every(img=>img.complete&&img.naturalWidth>0)),true);
+ const broken=await page.evaluate(()=>[...document.querySelectorAll('a[href^="#"]')].map(link=>link.hash).filter(hash=>hash&&!document.getElementById(decodeURIComponent(hash.slice(1)))));
+ assert.deepEqual(broken,[]);
+ if(mobile){
+   await page.locator('.nav-toggle').click();
+   assert.equal(await page.locator('.nav-toggle').getAttribute('aria-expanded'),'true');
+ }
+ await page.locator('#main-nav a[href="booking.html"]').click();
+ assert.match(page.url(),/booking\.html$/);
+ await date(24).waitFor();
+ await page.waitForFunction(()=>document.querySelector('#availability-status').textContent==='');
+ assert.equal(await date(23).isDisabled(),true);
+ assert.equal(await date(24).isEnabled(),true);
+ assert.equal(await date(25).isDisabled(),true);
+ assert.equal(await page.locator('#slot-area, #sum-slot, input[type=time], [name=slot]').count(),0);
+ await page.locator('[data-set-lang=en]').first().click();
+ assert.equal(await page.locator('html').getAttribute('lang'),'en');
+ assert.match(await text('#preferred-time'),/preferred visit time/);
+ await choose(24);
+ await btn.click();
+ assert.equal(await page.evaluate(()=>window.draftWhatsApp),undefined);
+ assert.equal(await page.locator('#f-name').evaluate(el=>el.validity.valueMissing),true);
+ await fill('name','Fixture & Test');
+ await fill('phone','00000000');
+ await fill('email','fixture@example.test');
+ await page.locator('#f-area').selectOption('tko');
+ await fill('cat-count','1');
+ await fill('cat','Fixture Cat');
+ assert.equal(await text('#sum-total'),'HK$200');
+ assert.equal(await text('#sum-transport'),'HK$0');
+ assert.match(await text('#sum-date'),/24 Nov 2026/);
+ let message=await getMessage();
+ assert.match(message,/Date: 2026-11-24/);
+ assert.match(message,/District: Tseung Kwan O/);
+ assert.doesNotMatch(message,/Notes:|Time:|00:00/);
+ await page.locator('#f-area').selectOption('island');
+ assert.equal(await text('#sum-total'),'HK$210');
+ await page.locator('label[for=svc-daily]').click();
+ assert.equal(await text('#sum-total'),'HK$210');
+ await choose(26);
+ assert.equal(await text('#sum-total'),'HK$380');
+ assert.match(await getMessage(),/Date: 2026-11-24, 2026-11-26/);
+ await page.locator('label[for=svc-twice]').click();
+ assert.equal(await date(26).isDisabled(),true);
+ assert.equal(await date(26).getAttribute('aria-pressed'),'false');
+ assert.equal(await text('#sum-total'),'HK$380');
+ await choose(27);
+ assert.equal(await text('#sum-total'),'HK$760');
+ assert.equal(await text('#sum-transport'),'HK$40 (4 × HK$10)');
+ await page.locator('#f-area').selectOption('other');
+ assert.equal(await text('#sum-total'),'HK$720 plus transport to be confirmed');
+ await page.locator('#f-area').selectOption('island');
+ await fill('notes','Prefer after 17:00 & flexible.');
+ message=await getMessage();
+ assert.match(message,/Service: Twice daily/);
+ assert.match(message,/Notes: Prefer after 17:00 & flexible\./);
+ assert.match(message,/Est\. total: HK\$760/);
+ await page.locator('[data-set-lang=tc]').first().click();
+ assert.equal(await page.locator('#f-area').inputValue(),'island');
+ assert.match(await text('#preferred-time'),/實際探訪時間將於確認預約時安排/);
+ assert.match(await getMessage(),/日期: 2026-11-24、2026-11-27/);
+ await page.locator('[data-set-lang=en]').first().click();
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+ await page.evaluate(()=>window.scrollTo(0,0));
+ if(out)await page.screenshot({path:out+'/booking-'+(mobile?'mobile':'desktop')+'.png',fullPage:true});
+ failEmail=true;
+ await page.locator('#submit-email').click();
+ await page.waitForFunction(()=>document.querySelector('#send-status').textContent.includes('didn'));
+ assert.equal(await btn.isEnabled(),true);
+ failEmail=false;
+ await page.locator('#submit-email').click();
+ await page.waitForFunction(()=>document.querySelector('#send-status').textContent.includes('Enquiry sent'));
+ assert.equal(emails.length,2);
+ assert.equal(emails[1].message,message);
+ assert.equal(emails[1].email,'fixture@example.test');
+ assert.equal(await btn.isDisabled(),true);
+ await page.reload();
+ assert.equal(await page.locator('html').getAttribute('lang'),'en');
+ assert.equal(await btn.isDisabled(),true);
+ await page.goBack();
+ assert.equal(new URL(page.url()).pathname,'/');
+ assert.equal(await page.locator('html').getAttribute('lang'),'en');
+ failSheet=true;
+ await page.goto(origin+'/booking.html');
+ await page.waitForFunction(()=>document.querySelector('#availability-status').textContent.includes('could not'));
+ assert.equal(await date(24).isDisabled(),true);
+ assert.equal(await btn.isDisabled(),true);
+ assert.deepEqual(errors,[]);
+ assert.deepEqual(missing,[]);
+ console.log('PASS '+viewport.width+'px: navigation, language, dates, package rates, transport, validation, mocked WhatsApp/email, reload/back, assets, and feed failure.');
+ await context.close();
+}
+}finally{await browser.close();}
+})().catch(error=>{console.error(error);process.exitCode=1;});

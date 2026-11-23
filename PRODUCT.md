@@ -10,7 +10,7 @@ web
 
 ## Users
 
-Nook Cat Care serves cat owners across Hong Kong, especially people who travel, work long hours, or need temporary help while their cats remain at home. The primary audience values familiar routines, cleanliness, careful handling of their home and keys, and clear evidence that each visit was completed. The service is particularly relevant to owners of shy, senior, anxious, routine-sensitive, or multiple cats.
+Nook Cat Care primarily serves cat owners in Tseung Kwan O, Sha Tin, Fo Tan and Tai Po. Hong Kong Island carries a HK$10 transport surcharge per visit. Other areas can enquire via WhatsApp to confirm service and any surcharge. The service is for cat owners, especially people who travel, work long hours, or need temporary help while their cats remain at home. The primary audience values familiar routines, cleanliness, careful handling of their home and keys, and clear evidence that each visit was completed. The service is particularly relevant to owners of shy, senior, anxious, routine-sensitive, or multiple cats.
 
 The website is primarily Traditional Chinese with a complete English version. Visitors need to understand availability, assess trust, and book comfortably from both mobile and desktop devices.
 
@@ -18,7 +18,7 @@ The website is primarily Traditional Chinese with a complete English version. Vi
 
 Nook Cat Care provides home-visit cat sitting so cats can remain in the environment they know while their owners are away. Each visit covers the agreed care routine, including food, water, litter care, basic wellbeing checks, and interaction appropriate to the individual cat. Owners receive photos, videos, and visit notes for reassurance.
 
-The website's primary job is to turn an anxious or time-sensitive search for cat care into an immediate, informed booking. A visible availability calendar should let customers choose an available date and proceed without waiting for manual confirmation. Success means qualified customers can understand the service, trust the sitter, and complete a booking with minimal uncertainty.
+The website's primary job is to let customers choose a service and available dates, then send an enquiry. The team confirms each booking and arranges visit times in its reply.
 
 ## Positioning
 
@@ -26,7 +26,7 @@ Cat-only home care in Hong Kong that combines vetted, cat-literate sitters, tran
 
 ## Conversion & proof
 
-- Primary CTA: book a sitter immediately through an availability calendar.
+- Primary CTA: send a date-only booking enquiry through the availability calendar.
 - Secondary CTA: enquire through WhatsApp.
 - The line a visitor remembers after 10 seconds: "Care that feels like home."
 - Belief ladder: cats experience less disruption when cared for in their familiar home; Nook understands cat behaviour and respects individual boundaries; every visit follows a clear, dependable routine; photo and video updates provide tangible reassurance; availability and pricing are transparent; booking is straightforward.
